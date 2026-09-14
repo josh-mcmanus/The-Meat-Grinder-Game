@@ -1,0 +1,248 @@
+[gd_scene format=3 uid="uid://dyfk0k1nfp2oi"]
+
+[ext_resource type="Script" uid="uid://cu2xd4asrxfft" path="res://Code/ClawMove.cs" id="1_hlywp"]
+[ext_resource type="Script" uid="uid://bagy6jugctsst" path="res://Code/ClawPart.cs" id="2_db3ar"]
+[ext_resource type="Texture2D" uid="uid://bseoit2fvroi0" path="res://Assets/Top.png" id="3_5a08a"]
+[ext_resource type="Texture2D" uid="uid://dwyqf885rbqc3" path="res://Assets/Middle.png" id="4_53mel"]
+[ext_resource type="Texture2D" uid="uid://b5av6ge7bc0dt" path="res://Assets/Bottom No Nail.png" id="5_qh6dt"]
+[ext_resource type="Script" uid="uid://o5ydf7etssce" path="res://Code/ConnectiveTissue.cs" id="6_5a08a"]
+
+[sub_resource type="Gradient" id="Gradient_wb80u"]
+colors = PackedColorArray(0.5924475, 2.201982e-06, 4.3317675e-07, 1, 0.34615496, 3.3691526e-07, 2.4065375e-07, 1)
+
+[node name="Claw" type="Node2D" unique_id=1200115391 node_paths=PackedStringArray("Top", "Middle", "Bottom")]
+script = ExtResource("1_hlywp")
+Top = NodePath("Top")
+Middle = NodePath("Middle")
+Bottom = NodePath("Bottom")
+
+[node name="Top" type="RigidBody2D" parent="." unique_id=1396914014]
+position = Vector2(63, -71)
+mass = 10.0
+gravity_scale = 0.0
+linear_damp = 3.0
+angular_damp = 25.0
+script = ExtResource("2_db3ar")
+MinRelativeRotation = -30.0
+MaxRelativeRotation = 45.0
+
+[node name="Sprite2D" type="Sprite2D" parent="Top" unique_id=557523751]
+position = Vector2(-62, 24)
+texture = ExtResource("3_5a08a")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Top" unique_id=1368236039]
+polygon = PackedVector2Array(-136, -22, -148, -19, -154, -16, -158, -7, -158, 8, -155, 14, -148, 20, -140, 24, -128, 27, -106, 27, -64, 21, -31, 21, -23, 24, -2, 29, 0, 33, -4, 42, -9, 43, -10, 44, -10, 47, -9, 48, 0, 48, 1, 71, 4, 71, 5, 70, 7, 42, 15, 33, 23, 28, 31, 21, 31, 15, 33, 11, 34, 5, 34, -11, 33, -15, 29, -18, 12, -21, -20, -21, -50, -23, -119, -23)
+
+[node name="Connective Markers" type="Node2D" parent="Top" unique_id=113671804]
+
+[node name="Marker" type="Marker2D" parent="Top/Connective Markers" unique_id=1018973968]
+position = Vector2(-156, 11)
+
+[node name="Marker2D" type="Marker2D" parent="Top/Connective Markers" unique_id=574402688]
+position = Vector2(-147, 9)
+
+[node name="Marker2D2" type="Marker2D" parent="Top/Connective Markers" unique_id=1965533118]
+position = Vector2(-137, 7)
+
+[node name="Marker2D3" type="Marker2D" parent="Top/Connective Markers" unique_id=952828566]
+position = Vector2(-132, 16)
+
+[node name="Marker2D4" type="Marker2D" parent="Top/Connective Markers" unique_id=577168937]
+position = Vector2(-124, 12)
+
+[node name="Marker2D5" type="Marker2D" parent="Top/Connective Markers" unique_id=159989010]
+position = Vector2(-115, 7)
+
+[node name="Marker2D6" type="Marker2D" parent="Top/Connective Markers" unique_id=2046261342]
+position = Vector2(-99, 4)
+
+[node name="Marker2D7" type="Marker2D" parent="Top/Connective Markers" unique_id=2010466794]
+position = Vector2(-91, 13)
+
+[node name="CPUParticles2D" type="CPUParticles2D" parent="Top" unique_id=970073423]
+position = Vector2(-127, 23)
+rotation = 0.17453292
+amount = 1
+lifetime = 3.0
+explosiveness = 0.01
+randomness = 1.0
+emission_shape = 3
+emission_rect_extents = Vector2(20, 1)
+scale_amount_max = 3.0
+color_ramp = SubResource("Gradient_wb80u")
+
+[node name="CPUParticles2D2" type="CPUParticles2D" parent="Top" unique_id=877234923]
+position = Vector2(3, 57)
+amount = 1
+lifetime = 8.0
+explosiveness = 0.01
+randomness = 1.0
+emission_shape = 3
+emission_rect_extents = Vector2(2, 14)
+scale_amount_max = 3.0
+color_ramp = SubResource("Gradient_wb80u")
+
+[node name="Middle" type="RigidBody2D" parent="." unique_id=473988908 node_paths=PackedStringArray("HigherPart")]
+position = Vector2(-67, -5)
+mass = 7.0
+gravity_scale = 0.0
+linear_damp = 3.0
+angular_damp = 25.0
+script = ExtResource("2_db3ar")
+MinRelativeRotation = -20.0
+MaxRelativeRotation = 40.0
+HigherPart = NodePath("../Top")
+
+[node name="Sprite2D" type="Sprite2D" parent="Middle" unique_id=390485122]
+position = Vector2(-2, 12)
+scale = Vector2(0.99999994, 0.99999994)
+texture = ExtResource("4_53mel")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Middle" unique_id=1892248693]
+position = Vector2(2, -1)
+polygon = PackedVector2Array(-23, -49, -18, -50, 3, -50, 7, -49, 10, -46, 12, -38, 12, -23, 13, -19, 13, 0, 12, 7, 12, 19, 13, 22, 13, 30, 14, 33, 14, 42, 16, 48, 16, 51, 17, 54, 17, 60, 11, 66, 2, 73, -4, 76, -6, 76, -8, 75, -9, 74, -9, 58, -10, 55, -10, 52, -12, 44, -12, 35, -14, 28, -14, 19, -16, 14, -16, 10, -17, 6, -17, -1, -18, -4, -18, -10, -23, -25, -25, -36, -25, -46)
+
+[node name="Connective Markers" type="Node2D" parent="Middle" unique_id=418847232]
+
+[node name="Marker 2" type="Marker2D" parent="Middle/Connective Markers" unique_id=215309998]
+position = Vector2(-20, -41)
+
+[node name="Marker2D" type="Marker2D" parent="Middle/Connective Markers" unique_id=189601441]
+position = Vector2(-16, -43)
+
+[node name="Marker2D2" type="Marker2D" parent="Middle/Connective Markers" unique_id=283165668]
+position = Vector2(-12, -40)
+
+[node name="Marker2D3" type="Marker2D" parent="Middle/Connective Markers" unique_id=1530311741]
+position = Vector2(-8, -36)
+
+[node name="Marker2D4" type="Marker2D" parent="Middle/Connective Markers" unique_id=1272993866]
+position = Vector2(-3, -38)
+
+[node name="Marker2D5" type="Marker2D" parent="Middle/Connective Markers" unique_id=1513473494]
+position = Vector2(0, -44)
+
+[node name="Marker2D6" type="Marker2D" parent="Middle/Connective Markers" unique_id=1988102200]
+position = Vector2(5, -39)
+
+[node name="Marker2D7" type="Marker2D" parent="Middle/Connective Markers" unique_id=1767294197]
+position = Vector2(7, -32)
+
+[node name="Connective Markers 2" type="Node2D" parent="Middle" unique_id=2038545020]
+
+[node name="Marker 3" type="Marker2D" parent="Middle/Connective Markers 2" unique_id=1096829739]
+position = Vector2(-4, 69)
+
+[node name="Marker2D" type="Marker2D" parent="Middle/Connective Markers 2" unique_id=295623978]
+position = Vector2(2, 69)
+
+[node name="Marker2D2" type="Marker2D" parent="Middle/Connective Markers 2" unique_id=1314615151]
+position = Vector2(0, 62)
+
+[node name="Marker2D3" type="Marker2D" parent="Middle/Connective Markers 2" unique_id=603074195]
+position = Vector2(4, 59)
+
+[node name="Marker2D4" type="Marker2D" parent="Middle/Connective Markers 2" unique_id=857025177]
+position = Vector2(7, 56)
+
+[node name="Marker2D5" type="Marker2D" parent="Middle/Connective Markers 2" unique_id=1584137508]
+position = Vector2(15, 58)
+
+[node name="Marker2D6" type="Marker2D" parent="Middle/Connective Markers 2" unique_id=1170063570]
+position = Vector2(10, 53)
+
+[node name="Marker2D7" type="Marker2D" parent="Middle/Connective Markers 2" unique_id=1833573327]
+position = Vector2(16, 48)
+
+[node name="CPUParticles2D2" type="CPUParticles2D" parent="Middle" unique_id=315209802]
+position = Vector2(8.000002, 47)
+amount = 1
+lifetime = 5.0
+explosiveness = 0.01
+randomness = 1.0
+emission_shape = 3
+emission_rect_extents = Vector2(10, 1)
+scale_amount_max = 3.0
+color_ramp = SubResource("Gradient_wb80u")
+
+[node name="Bottom" type="RigidBody2D" parent="." unique_id=1004000107 node_paths=PackedStringArray("HigherPart")]
+position = Vector2(-14.615, 68.505)
+mass = 5.0
+gravity_scale = 0.0
+linear_damp = 2.0
+angular_damp = 25.0
+script = ExtResource("2_db3ar")
+MinRelativeRotation = -50.0
+MaxRelativeRotation = 40.0
+HigherPart = NodePath("../Middle")
+
+[node name="Sprite2D" type="Sprite2D" parent="Bottom" unique_id=772469334]
+texture = ExtResource("5_qh6dt")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Bottom" unique_id=1292362090]
+position = Vector2(3, 6)
+polygon = PackedVector2Array(-54.725, -10, -38.725, -22, -31.725, -22, -24.725, -16, -23.725, -12, -19.725, -10, -11.725, -10, 2.2749996, -12, 20.275, -16, 31.275, -19, 45.275, -19, 53.275, -17, 56.275, -14, 56.275, -9, 44.275, -4, 38.275, -3, 32.275, 0, 30.275, 3, 27.275, 6, 16.275, 8, -12.725, 10, -41.725, 10, -46.725, 8, -57, 8, -60.725, 4, -61.725, -3)
+
+[node name="Connective Markers" type="Node2D" parent="Bottom" unique_id=360818514]
+
+[node name="Marker 4" type="Marker2D" parent="Bottom/Connective Markers" unique_id=92230385]
+position = Vector2(-53.385, 8.495005)
+
+[node name="Marker2D" type="Marker2D" parent="Bottom/Connective Markers" unique_id=2093845476]
+position = Vector2(-51.385, 2.4950037)
+
+[node name="Marker2D2" type="Marker2D" parent="Bottom/Connective Markers" unique_id=527174874]
+position = Vector2(-46.385002, 3.4950037)
+
+[node name="Marker2D3" type="Marker2D" parent="Bottom/Connective Markers" unique_id=612604968]
+position = Vector2(-44.385, -1.5049998)
+
+[node name="Marker2D4" type="Marker2D" parent="Bottom/Connective Markers" unique_id=280359929]
+position = Vector2(-41.385, -6.504999)
+
+[node name="Marker2D5" type="Marker2D" parent="Bottom/Connective Markers" unique_id=1430856702]
+position = Vector2(-36.385, -3.505001)
+
+[node name="Marker2D6" type="Marker2D" parent="Bottom/Connective Markers" unique_id=42160857]
+position = Vector2(-36.385, -11.504997)
+
+[node name="Marker2D7" type="Marker2D" parent="Bottom/Connective Markers" unique_id=1772004009]
+position = Vector2(-30.385, -13.504998)
+
+[node name="Top Joint" type="PinJoint2D" parent="." unique_id=1574276853]
+position = Vector2(-73, -53)
+node_a = NodePath("../Top")
+node_b = NodePath("../Middle")
+bias = 0.9
+motor_enabled = true
+motor_target_velocity = 0.034906585
+
+[node name="Middle Joint" type="PinJoint2D" parent="." unique_id=763018828]
+position = Vector2(-59, 61)
+node_a = NodePath("../Middle")
+node_b = NodePath("../Bottom")
+bias = 0.9
+motor_enabled = true
+motor_target_velocity = 0.034906585
+
+[node name="TopConnectiveTissueController" type="Node2D" parent="." unique_id=244249644 node_paths=PackedStringArray("StartPoints", "EndPoints")]
+script = ExtResource("6_5a08a")
+StartPoints = [NodePath("../Top/Connective Markers/Marker"), NodePath("../Top/Connective Markers/Marker2D"), NodePath("../Top/Connective Markers/Marker2D2"), NodePath("../Top/Connective Markers/Marker2D3"), NodePath("../Top/Connective Markers/Marker2D4"), NodePath("../Top/Connective Markers/Marker2D5"), NodePath("../Top/Connective Markers/Marker2D6"), NodePath("../Top/Connective Markers/Marker2D7")]
+EndPoints = [NodePath("../Middle/Connective Markers/Marker 2"), NodePath("../Middle/Connective Markers/Marker2D"), NodePath("../Middle/Connective Markers/Marker2D2"), NodePath("../Middle/Connective Markers/Marker2D3"), NodePath("../Middle/Connective Markers/Marker2D4"), NodePath("../Middle/Connective Markers/Marker2D5"), NodePath("../Middle/Connective Markers/Marker2D6"), NodePath("../Middle/Connective Markers/Marker2D7")]
+
+[node name="BottomConnectiveTissueController" type="Node2D" parent="." unique_id=288435259 node_paths=PackedStringArray("StartPoints", "EndPoints")]
+script = ExtResource("6_5a08a")
+StartPoints = [NodePath("../Middle/Connective Markers 2/Marker 3"), NodePath("../Middle/Connective Markers 2/Marker2D"), NodePath("../Middle/Connective Markers 2/Marker2D2"), NodePath("../Middle/Connective Markers 2/Marker2D3"), NodePath("../Middle/Connective Markers 2/Marker2D4"), NodePath("../Middle/Connective Markers 2/Marker2D5"), NodePath("../Middle/Connective Markers 2/Marker2D6"), NodePath("../Middle/Connective Markers 2/Marker2D7")]
+EndPoints = [NodePath("../Bottom/Connective Markers/Marker 4"), NodePath("../Bottom/Connective Markers/Marker2D"), NodePath("../Bottom/Connective Markers/Marker2D2"), NodePath("../Bottom/Connective Markers/Marker2D3"), NodePath("../Bottom/Connective Markers/Marker2D4"), NodePath("../Bottom/Connective Markers/Marker2D5"), NodePath("../Bottom/Connective Markers/Marker2D6"), NodePath("../Bottom/Connective Markers/Marker2D7")]
+
+[node name="CPUParticles2D Blood spout test" type="CPUParticles2D" parent="." unique_id=106393577]
+visible = false
+position = Vector2(72, 46)
+spread = 0.0
+initial_velocity_min = 100.0
+initial_velocity_max = 100.0
+linear_accel_min = 100.0
+linear_accel_max = 200.0
+scale_amount_min = 5.0
+scale_amount_max = 5.0
+color = Color(0.7397895, 1.9372628e-06, 9.62615e-07, 1)

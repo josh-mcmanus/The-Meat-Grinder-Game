@@ -1,0 +1,163 @@
+using Godot;
+using System;
+
+public partial class ClawMove : Node2D
+{
+    [Export]
+    public float MoveSpeed = 300f;
+	[Export]
+	public float RotationSpeed = 90f; // In Degrees per second
+	
+	
+	[Export]
+	public RigidBody2D Top;
+	[Export]
+	public RigidBody2D Middle;
+	[Export]
+	public RigidBody2D Bottom;
+	
+	[Export]
+	public Joint2D TopJoint;
+	[Export]
+	public Joint2D BottomJoint;
+	
+	
+    public override void _Ready()
+	{
+		
+	}
+	
+	
+	// Gravity is set on rigidbody NOT here
+    public override void _PhysicsProcess(double delta)
+    {
+		// Move
+		// Disabled for now, change to mosue moveneted?
+		// Vector2 direction = Input.GetVector("Left", "Right", "Up", "Down");
+		// Top.LinearVelocity = direction * MoveSpeed;
+		
+		
+		// Rotate Entire Claw
+		float rotationInput = Input.GetAxis("Rotate Left", "Rotate Right");
+		
+		if (rotationInput != 0)
+		{
+			Top.AngularVelocity = rotationInput * Mathf.DegToRad(RotationSpeed);
+		}
+		else
+		{
+			Top.AngularVelocity = 0;
+		}
+		
+		// Rotate Middle
+		float rotationAmount = 0;
+		if (Input.IsActionPressed("Left"))
+		{
+			rotationAmount = rotationInput + Mathf.DegToRad(RotationSpeed);
+		}
+		else if (Input.IsActionPressed("Right"))
+		{
+			rotationAmount = rotationInput - Mathf.DegToRad(RotationSpeed);
+		}
+		if (rotationAmount != 0)
+		{
+			Middle.AngularVelocity = Top.AngularVelocity + rotationAmount;
+		}
+		
+		// Rotate Bottom
+		rotationAmount = 0;
+		if (Input.IsActionPressed("Up"))
+		{
+			rotationAmount = rotationInput - Mathf.DegToRad(RotationSpeed);
+		}
+		else if (Input.IsActionPressed("Down"))
+		{
+			rotationAmount = rotationInput + Mathf.DegToRad(RotationSpeed);
+		}
+		if (rotationAmount != 0)
+		{
+			Bottom.AngularVelocity = Middle.AngularVelocity + rotationAmount;
+		}
+		
+		
+		// if (Input.IsActionPressed("Left Click"))
+		// {
+		// 	float rotationAmount = Mathf.DegToRad(RotationSpeed);
+			
+		// 	Middle.AngularVelocity = Top.AngularVelocity + rotationAmount;
+		// 	Bottom.AngularVelocity = Middle.AngularVelocity;
+		// }
+		
+		// Limit Rotation
+		// if (Top.RotationDegrees <= -15 && Top.AngularVelocity < 0)
+		// {
+		// 	Top.AngularVelocity = 0;
+		// 	Top.RotationDegrees = -15;
+		// }
+		// if (Top.RotationDegrees >= 15 && Top.AngularVelocity > 0)
+		// {
+		// 	Top.AngularVelocity = 0;
+		// 	Top.RotationDegrees = 15;
+		// }
+		
+		
+		
+		
+		// Rotate Whole
+		// float rotationInput = Input.GetAxis("Rotate Left", "Rotate Right");
+		// AngularVelocity = rotationInput * RotationSpeed;
+		
+		// Rotate claw
+		
+		// check if within rotation bounds
+		// e.g. if outside of 90 degrees then stop / move back
+		
+		// Finger.AngularVelocity = rotationInput * RotationSpeed;
+		
+		
+		// Left Claw
+		// if (Input.IsActionJustPressed("test1"))
+		// {
+		// 	SmoothClawRotate(Claw, -60);
+		// }
+		// if (Input.IsActionJustReleased("test1"))
+		// {
+		// 	SmoothClawRotate(Claw, ClawOriginRotation);
+		// }
+		
+    }
+	
+	
+	// private Tween? clawTween;
+	
+	// private void SmoothClawMove(RigidBody2D claw, Vector2 targetPosition)
+	// {
+	// 	clawTween?.Kill();
+		
+	// 	clawTween = CreateTween();
+		
+	// 	clawTween.TweenProperty(
+	// 		claw,
+	// 		"position",
+	// 		targetPosition,
+	// 		ClawOpenTime
+	// 	).SetTrans(Tween.TransitionType.Sine).SetEase(Tween.EaseType.InOut);
+	// }
+	
+	// private void SmoothClawRotate(RigidBody2D claw, float targetRotation)
+	// {
+	// 	clawTween?.Kill();
+		
+	// 	clawTween = CreateTween();
+		
+	// 	clawTween.TweenProperty(
+	// 		claw,
+	// 		"rotation",
+	// 		Mathf.DegToRad(targetRotation),
+	// 		ClawOpenTime
+	// 	).SetTrans(Tween.TransitionType.Sine).SetEase(Tween.EaseType.InOut);
+	// }
+	
+	
+	
+}

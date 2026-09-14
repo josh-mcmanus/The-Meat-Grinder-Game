@@ -1,0 +1,62 @@
+[gd_scene format=3 uid="uid://67l14gdo45o0"]
+
+[ext_resource type="PackedScene" uid="uid://dyfk0k1nfp2oi" path="res://Scenes/claw.tscn" id="1_8gbba"]
+[ext_resource type="PackedScene" uid="uid://c3tpxpqkbalg0" path="res://Scenes/meat_long_1.tscn" id="2_jjvhh"]
+[ext_resource type="PackedScene" uid="uid://bli0b8f3x10dt" path="res://Scenes/meat_cube.tscn" id="3_kry3j"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_7b218"]
+size = Vector2(822, 183.70999)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_73fth"]
+size = Vector2(20, 537.52747)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_gxoi5"]
+size = Vector2(20, 538.28503)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hunv0"]
+size = Vector2(98.54498, 184)
+
+[node name="main" type="Node2D" unique_id=2057963844]
+
+[node name="Claw" parent="." unique_id=1200115391 instance=ExtResource("1_8gbba")]
+position = Vector2(249, 298)
+
+[node name="Meat Long 1" parent="." unique_id=1976232199 instance=ExtResource("2_jjvhh")]
+position = Vector2(331, 357)
+
+[node name="Meat Cube" parent="." unique_id=356658779 instance=ExtResource("3_kry3j")]
+position = Vector2(274, 425)
+
+[node name="StaticBody2D2" type="StaticBody2D" parent="." unique_id=884540054]
+position = Vector2(443.84, 548)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D2" unique_id=14937724]
+position = Vector2(-32.839996, 82.14502)
+shape = SubResource("RectangleShape2D_7b218")
+
+[node name="Polygon2D" type="Polygon2D" parent="StaticBody2D2" unique_id=2085765979]
+color = Color(0.43200514, 0.3104596, 0.2837122, 1)
+polygon = PackedVector2Array(-443.84, 174, -443.84, -9.710022, 378.16, -10, 378.16, 174)
+
+[node name="StaticBody2D3" type="StaticBody2D" parent="." unique_id=1634117502]
+position = Vector2(1141.975, 269.365)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D3" unique_id=491802316]
+shape = SubResource("RectangleShape2D_73fth")
+
+[node name="StaticBody2D4" type="StaticBody2D" parent="." unique_id=783813657]
+position = Vector2(10.015, 269.15)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D4" unique_id=1919558338]
+position = Vector2(0, -0.0074768066)
+shape = SubResource("RectangleShape2D_gxoi5")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=324579777]
+position = Vector2(1102.725, 630.14)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" unique_id=1851728461]
+shape = SubResource("RectangleShape2D_hunv0")
+
+[node name="Polygon2D" type="Polygon2D" parent="StaticBody2D" unique_id=999178137]
+color = Color(0.43137255, 0.30980393, 0.28235295, 1)
+polygon = PackedVector2Array(-49.27185, -92.015015, 49.304565, -92.03674, 49.29065, 92.00842, -49.27185, 91.9928)

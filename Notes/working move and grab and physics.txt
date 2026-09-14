@@ -1,0 +1,96 @@
+using Godot;
+using System;
+
+public partial class Claw : RigidBody2D
+{
+	[Export]
+	public float Speed = 300f;
+	[Export]
+	public float RotationSpeed = 3f;
+	
+	public const float JumpVelocity = -400.0f;
+
+
+	[Export]
+	public Area2D grabArea;
+	
+	private Node2D? objectInGrabArea;
+	private PinJoint2D? grabJoint;
+
+	public override void _Ready()
+	{
+		grabArea.BodyEntered += OnBodyEntered;
+		grabArea.BodyExited += OnBodyExited;
+	}
+	
+	
+	public override void _PhysicsProcess(double delta)
+	{
+		// Move
+		Vector2 direction = Input.GetVector("Left", "Right", "Up", "Down");
+		LinearVelocity = direction * Speed;
+		
+		// Rotate
+		float rotationInput = Input.GetAxis("Rotate Left", "Rotate Right");
+		AngularVelocity = rotationInput * RotationSpeed;
+		
+		// Grab
+		if (Input.IsActionJustPressed("grab"))
+		{
+			Grab();
+		}
+		
+		// Release
+		if (Input.IsActionJustReleased("grab"))
+		{
+			Release();
+		}
+	}
+
+	private void OnBodyEntered(Node2D body)
+	{
+		objectInGrabArea = body;
+	}
+
+	private void OnBodyExited(Node2D body)
+	{
+		if (objectInGrabArea == body)
+		{
+			objectInGrabArea = null;
+		}
+	}
+
+	private void Grab()
+	{
+		if (objectInGrabArea == null)
+			return;
+
+		if (grabJoint != null)
+			return;
+
+		if (objectInGrabArea is not PhysicsBody2D physicsBody)
+			return;
+
+		// Create the joint
+		grabJoint = new PinJoint2D();
+
+		GetParent().AddChild(grabJoint);
+
+		// Put the joint at the grabbing point
+		grabJoint.GlobalPosition =
+			GetNode<Area2D>("GrabArea").GlobalPosition;
+
+		// Connect claw to object
+		grabJoint.NodeA = GetPath();
+		grabJoint.NodeB = physicsBody.GetPath();
+	}
+
+	private void Release()
+	{
+		if (grabJoint == null)
+			return;
+
+		grabJoint.QueueFree();
+		grabJoint = null;
+	}
+}

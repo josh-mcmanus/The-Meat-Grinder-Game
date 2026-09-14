@@ -1,0 +1,2 @@
+use a pin joint to join the two rigid bodies / soft bodies together.
+use the softness to get the sinew like ripping apart look where they want to rip apart

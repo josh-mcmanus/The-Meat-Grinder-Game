@@ -1,0 +1,82 @@
+using Godot;
+using System;
+
+public partial class ClawMove : Node2D
+{
+	[Export]
+	public float MoveSpeed = 300f;
+	[Export]
+	public float RotationSpeed = 90f; // In Degrees per second
+	
+	
+	[Export]
+	public RigidBody2D Top;
+	[Export]
+	public RigidBody2D Middle;
+	[Export]
+	public RigidBody2D Bottom;
+	
+	[Export]
+	public Joint2D TopJoint;
+	[Export]
+	public Joint2D BottomJoint;
+	
+	
+	public override void _Ready()
+	{
+		
+	}
+	
+	
+	// Gravity is set on rigidbody NOT here
+	public override void _PhysicsProcess(double delta)
+	{
+		// Move
+		// Disabled for now, change to mosue moveneted?
+		// Vector2 direction = Input.GetVector("Left", "Right", "Up", "Down");
+		// Top.LinearVelocity = direction * MoveSpeed;
+		
+		
+		// ====================
+		// Rotate Entire Claw
+		// ====================
+		float rotationInput = Input.GetAxis("Rotate Left", "Rotate Right");
+		
+		Top.AngularVelocity = rotationInput * Mathf.DegToRad(RotationSpeed);
+		
+		// ====================
+		// Rotate Middle
+		// ====================
+		if (Input.IsActionPressed("Left"))
+		{
+			Middle.AngularVelocity = Mathf.DegToRad(RotationSpeed);
+		}
+		else if (Input.IsActionPressed("Right"))
+		{
+			Middle.AngularVelocity = -Mathf.DegToRad(RotationSpeed);
+		}
+		else
+		{
+			Middle.AngularVelocity = 0;
+		}
+		
+		// ====================
+		// Rotate Bottom
+		// ====================
+		if (Input.IsActionPressed("Up"))
+		{
+			Bottom.AngularVelocity = -Mathf.DegToRad(RotationSpeed);
+		}
+		else if (Input.IsActionPressed("Down"))
+		{
+			Bottom.AngularVelocity = Mathf.DegToRad(RotationSpeed);
+		}
+		else
+		{
+			Bottom.AngularVelocity = 0;
+		}
+		
+		
+	}
+	
+}

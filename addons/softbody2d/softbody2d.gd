@@ -13,7 +13,7 @@ extends Polygon2D
 class_name SoftBody2D
 
 ## Called after a joint is removed.
-signal joint_removed(rigid_body_a: SoftBodyChild, rigid_body_b: SoftBodyChild)
+signal joint_removed(rigid_body_a: PhysicsBody2D, rigid_body_b: PhysicsBody2D)
 
 #region Properties
 
@@ -1232,8 +1232,8 @@ func remove_joint(rigid_body_child: SoftBodyChild, joint: Joint2D):
 		var remote_transform_b : RemoteTransform2D= rigid_body_b.rigidbody.get_children().filter(func (node): return node is RemoteTransform2D)[0]
 		rigid_body_b.rigidbody.rotation = bone_b.rotation
 		# TODO deactivate it.
-		rigid_body_a.shape.scale = Vector2(0,0)
-		rigid_body_a.rigidbody.process_mode = Node.PROCESS_MODE_DISABLED
+		rigid_body_b.shape.scale = Vector2(0,0)
+		rigid_body_b.rigidbody.process_mode = Node.PROCESS_MODE_DISABLED
 		#create_tween().tween_property(rigid_body_b.shape, "scale", Vector2(), 0).finished.connect(func(): rigid_body_b.rigidbody.process_mode = Node.PROCESS_MODE_DISABLED)
 		remote_transform_b.update_rotation = true
 	skeleton_modification_stack.set_modification(bone_a_idx, modification_a)
@@ -1241,7 +1241,7 @@ func remove_joint(rigid_body_child: SoftBodyChild, joint: Joint2D):
 	_skeleton_node.set_modification_stack(skeleton_modification_stack)
 	_update_soft_body_rigidbodies(_skeleton_node)
 	
-	joint_removed.emit(rigid_body_a, rigid_body_b)
+	joint_removed.emit(rigid_body_a.rigidbody, rigid_body_b.rigidbody)
 
 ## Get all the bodies, including joints and shape
 func get_rigid_bodies() -> Array[SoftBodyChild]:

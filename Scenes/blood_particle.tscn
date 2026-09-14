@@ -1,0 +1,15 @@
+[gd_scene format=3 uid="uid://bclrp3dt4dyw8"]
+
+[sub_resource type="Gradient" id="Gradient_cb66r"]
+colors = PackedColorArray(0.5924475, 2.201982e-06, 4.3317675e-07, 1, 0.34615496, 3.3691526e-07, 2.4065375e-07, 1)
+
+[node name="Blood Particle" type="Node2D" unique_id=1348228398]
+
+[node name="CPUParticles2D" type="CPUParticles2D" parent="." unique_id=2143976179]
+amount = 1
+explosiveness = 0.01
+randomness = 1.0
+emission_shape = 1
+emission_sphere_radius = 3.0
+scale_amount_max = 3.0
+color_ramp = SubResource("Gradient_cb66r")

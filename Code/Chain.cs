@@ -31,8 +31,8 @@ public partial class Chain : RigidBody2D
 	public override void _PhysicsProcess(double delta)
 	{
 		float dt = (float)delta;
-		float newLimitLower = Utils.CalculateAngleLimit(abovePart.GlobalRotation, lowerLimitRads);
-		float newLimitUpper = Utils.CalculateAngleLimit(abovePart.GlobalRotation, upperLimitRads);
+		float newLimitLower = abovePart.GlobalRotation + lowerLimitRads;
+		float newLimitUpper = abovePart.GlobalRotation + upperLimitRads;
 		
 		// Offset the joints angular limit to the rotation of its above part, if it changed since last physics tick
 		if (Math.Round(joint.AngularLimitLower, 2) != Math.Round(newLimitLower, 2))

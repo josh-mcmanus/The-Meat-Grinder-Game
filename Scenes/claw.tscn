@@ -10,11 +10,52 @@
 [sub_resource type="Gradient" id="Gradient_wb80u"]
 colors = PackedColorArray(0.5924475, 2.201982e-06, 4.3317675e-07, 1, 0.34615496, 3.3691526e-07, 2.4065375e-07, 1)
 
-[node name="Claw" type="Node2D" unique_id=1200115391 node_paths=PackedStringArray("Top", "Middle", "Bottom")]
+[sub_resource type="SkeletonModification2DCCDIK" id="SkeletonModification2DCCDIK_53mel"]
+target_nodepath = NodePath("../IKTarget")
+tip_nodepath = NodePath("Bone2D/Bone2D/Bone2D/IKTip")
+ccdik_data_chain_length = 3
+joint_data/0/bone_index = 0
+joint_data/0/bone2d_node = NodePath("Bone2D")
+joint_data/0/rotate_from_joint = false
+joint_data/0/enable_constraint = true
+joint_data/0/constraint_angle_min = 34.999996
+joint_data/0/constraint_angle_max = -49.999996
+joint_data/0/constraint_angle_invert = true
+joint_data/0/constraint_in_localspace = true
+joint_data/0/editor_draw_gizmo = true
+joint_data/1/bone_index = 1
+joint_data/1/bone2d_node = NodePath("Bone2D/Bone2D")
+joint_data/1/rotate_from_joint = false
+joint_data/1/enable_constraint = true
+joint_data/1/constraint_angle_min = -24.999998
+joint_data/1/constraint_angle_max = 45.0
+joint_data/1/constraint_angle_invert = true
+joint_data/1/constraint_in_localspace = true
+joint_data/1/editor_draw_gizmo = true
+joint_data/2/bone_index = 2
+joint_data/2/bone2d_node = NodePath("Bone2D/Bone2D/Bone2D")
+joint_data/2/rotate_from_joint = false
+joint_data/2/enable_constraint = true
+joint_data/2/constraint_angle_min = -54.999996
+joint_data/2/constraint_angle_max = 45.0
+joint_data/2/constraint_angle_invert = true
+joint_data/2/constraint_in_localspace = true
+joint_data/2/editor_draw_gizmo = true
+
+[sub_resource type="SkeletonModificationStack2D" id="SkeletonModificationStack2D_5a08a"]
+enabled = true
+modification_count = 1
+modifications/0 = SubResource("SkeletonModification2DCCDIK_53mel")
+
+[node name="Claw" type="Node2D" unique_id=1200115391 node_paths=PackedStringArray("Top", "Middle", "Bottom", "IKTarget", "TopBone", "MiddleBone", "BottomBone")]
 script = ExtResource("1_hlywp")
 Top = NodePath("Top")
 Middle = NodePath("Middle")
 Bottom = NodePath("Bottom")
+IKTarget = NodePath("IKTarget")
+TopBone = NodePath("Skeleton2D/Bone2D")
+MiddleBone = NodePath("Skeleton2D/Bone2D/Bone2D")
+BottomBone = NodePath("Skeleton2D/Bone2D/Bone2D/Bone2D")
 
 [node name="Top" type="RigidBody2D" parent="." unique_id=1396914014]
 position = Vector2(63, -71)
@@ -32,6 +73,29 @@ texture = ExtResource("3_5a08a")
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Top" unique_id=1368236039]
 polygon = PackedVector2Array(-136, -22, -148, -19, -154, -16, -158, -7, -158, 8, -155, 14, -148, 20, -140, 24, -128, 27, -106, 27, -64, 21, -31, 21, -23, 24, -2, 29, 0, 33, -4, 42, -9, 43, -10, 44, -10, 47, -9, 48, 0, 48, 1, 71, 4, 71, 5, 70, 7, 42, 15, 33, 23, 28, 31, 21, 31, 15, 33, 11, 34, 5, 34, -11, 33, -15, 29, -18, 12, -21, -20, -21, -50, -23, -119, -23)
+
+[node name="CPUParticles2D" type="CPUParticles2D" parent="Top" unique_id=970073423]
+position = Vector2(-127, 23)
+rotation = 0.17453292
+amount = 1
+lifetime = 3.0
+explosiveness = 0.01
+randomness = 1.0
+emission_shape = 3
+emission_rect_extents = Vector2(20, 1)
+scale_amount_max = 3.0
+color_ramp = SubResource("Gradient_wb80u")
+
+[node name="CPUParticles2D2" type="CPUParticles2D" parent="Top" unique_id=877234923]
+position = Vector2(3, 57)
+amount = 1
+lifetime = 8.0
+explosiveness = 0.01
+randomness = 1.0
+emission_shape = 3
+emission_rect_extents = Vector2(2, 14)
+scale_amount_max = 3.0
+color_ramp = SubResource("Gradient_wb80u")
 
 [node name="Connective Markers" type="Node2D" parent="Top" unique_id=113671804]
 
@@ -59,29 +123,6 @@ position = Vector2(-99, 4)
 [node name="Marker2D7" type="Marker2D" parent="Top/Connective Markers" unique_id=2010466794]
 position = Vector2(-91, 13)
 
-[node name="CPUParticles2D" type="CPUParticles2D" parent="Top" unique_id=970073423]
-position = Vector2(-127, 23)
-rotation = 0.17453292
-amount = 1
-lifetime = 3.0
-explosiveness = 0.01
-randomness = 1.0
-emission_shape = 3
-emission_rect_extents = Vector2(20, 1)
-scale_amount_max = 3.0
-color_ramp = SubResource("Gradient_wb80u")
-
-[node name="CPUParticles2D2" type="CPUParticles2D" parent="Top" unique_id=877234923]
-position = Vector2(3, 57)
-amount = 1
-lifetime = 8.0
-explosiveness = 0.01
-randomness = 1.0
-emission_shape = 3
-emission_rect_extents = Vector2(2, 14)
-scale_amount_max = 3.0
-color_ramp = SubResource("Gradient_wb80u")
-
 [node name="Middle" type="RigidBody2D" parent="." unique_id=473988908 node_paths=PackedStringArray("HigherPart")]
 position = Vector2(-67, -5)
 mass = 7.0
@@ -101,6 +142,17 @@ texture = ExtResource("4_53mel")
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Middle" unique_id=1892248693]
 position = Vector2(2, -1)
 polygon = PackedVector2Array(-23, -49, -18, -50, 3, -50, 7, -49, 10, -46, 12, -38, 12, -23, 13, -19, 13, 0, 12, 7, 12, 19, 13, 22, 13, 30, 14, 33, 14, 42, 16, 48, 16, 51, 17, 54, 17, 60, 11, 66, 2, 73, -4, 76, -6, 76, -8, 75, -9, 74, -9, 58, -10, 55, -10, 52, -12, 44, -12, 35, -14, 28, -14, 19, -16, 14, -16, 10, -17, 6, -17, -1, -18, -4, -18, -10, -23, -25, -25, -36, -25, -46)
+
+[node name="CPUParticles2D2" type="CPUParticles2D" parent="Middle" unique_id=315209802]
+position = Vector2(8, 47)
+amount = 1
+lifetime = 5.0
+explosiveness = 0.01
+randomness = 1.0
+emission_shape = 3
+emission_rect_extents = Vector2(10, 1)
+scale_amount_max = 3.0
+color_ramp = SubResource("Gradient_wb80u")
 
 [node name="Connective Markers" type="Node2D" parent="Middle" unique_id=418847232]
 
@@ -154,19 +206,8 @@ position = Vector2(10, 53)
 [node name="Marker2D7" type="Marker2D" parent="Middle/Connective Markers 2" unique_id=1833573327]
 position = Vector2(16, 48)
 
-[node name="CPUParticles2D2" type="CPUParticles2D" parent="Middle" unique_id=315209802]
-position = Vector2(8.000002, 47)
-amount = 1
-lifetime = 5.0
-explosiveness = 0.01
-randomness = 1.0
-emission_shape = 3
-emission_rect_extents = Vector2(10, 1)
-scale_amount_max = 3.0
-color_ramp = SubResource("Gradient_wb80u")
-
 [node name="Bottom" type="RigidBody2D" parent="." unique_id=1004000107 node_paths=PackedStringArray("HigherPart")]
-position = Vector2(-14.615, 68.505)
+position = Vector2(-14, 68)
 mass = 5.0
 gravity_scale = 0.0
 linear_damp = 2.0
@@ -208,6 +249,42 @@ position = Vector2(-36.385, -11.504997)
 
 [node name="Marker2D7" type="Marker2D" parent="Bottom/Connective Markers" unique_id=1772004009]
 position = Vector2(-30.385, -13.504998)
+
+[node name="Skeleton2D" type="Skeleton2D" parent="." unique_id=1340479106]
+modification_stack = SubResource("SkeletonModificationStack2D_5a08a")
+
+[node name="Bone2D" type="Bone2D" parent="Skeleton2D" unique_id=657015854]
+position = Vector2(0, -71)
+rest = Transform2D(1, 0, 0, 1, 0, -71)
+metadata/_local_pose_override_enabled_ = true
+
+[node name="Bone2D" type="Bone2D" parent="Skeleton2D/Bone2D" unique_id=1209028480]
+position = Vector2(-73, 18)
+rest = Transform2D(1, 0, 0, 1, -73, 18)
+metadata/_local_pose_override_enabled_ = true
+
+[node name="Bone2D" type="Bone2D" parent="Skeleton2D/Bone2D/Bone2D" unique_id=842788637]
+position = Vector2(14, 114)
+rest = Transform2D(1, 0, 0, 1, 16, 121)
+auto_calculate_length_and_angle = false
+length = 95.0
+bone_angle = 0.0
+metadata/_local_pose_override_enabled_ = true
+
+[node name="IKTip" type="Marker2D" parent="Skeleton2D/Bone2D/Bone2D/Bone2D" unique_id=399819370]
+position = Vector2(102, 0)
+
+[node name="Polygon2D" type="Polygon2D" parent="Skeleton2D/Bone2D/Bone2D/Bone2D" unique_id=746015396]
+polygon = PackedVector2Array(0, 0, 19, -5, 95, 0, 19, 5)
+
+[node name="Polygon2D" type="Polygon2D" parent="Skeleton2D/Bone2D/Bone2D" unique_id=220262690]
+polygon = PackedVector2Array(0, 0, 8, 24, 14, 114, -2, 25)
+
+[node name="Polygon2D" type="Polygon2D" parent="Skeleton2D/Bone2D" unique_id=2027288028]
+polygon = PackedVector2Array(0, 0, -16, -1, -73, 18, -14, 9)
+
+[node name="IKTarget" type="Marker2D" parent="." unique_id=493475243]
+position = Vector2(43, 61)
 
 [node name="Top Joint" type="PinJoint2D" parent="." unique_id=1574276853]
 position = Vector2(-73, -53)

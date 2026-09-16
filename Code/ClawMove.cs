@@ -1,3 +1,4 @@
+
 using Godot;
 using System;
 
@@ -7,16 +8,22 @@ public partial class ClawMove : Node2D
 	[Export] public RigidBody2D Top;
 	[Export] public RigidBody2D Middle;
 	[Export] public RigidBody2D Bottom;
+	[Export] public Marker2D IKTarget;
+	
+	[Export] public Bone2D TopBone;
+	[Export] public Bone2D MiddleBone;
+	[Export] public Bone2D BottomBone;
 	
 	
 	
 	private const float MoveSpeed = 300f;
-	private const float RotationSpeedDegrees = 45f;
+	private const float IKTargetMaxDistance = 250f;
 	
-	private float rotationSpeedRads;
 	private float relativeTopMass;
 	private float relativeMiddleMass;
 	private float relativeBottomMass;
+	
+	private Vector2 ikTargetOffset;
 	
 	
 	public override void _Ready()
@@ -37,34 +44,66 @@ public partial class ClawMove : Node2D
 		relativeTopMass = Top.Mass + Middle.Mass + Bottom.Mass;
 		relativeMiddleMass = Middle.Mass + Bottom.Mass;
 		relativeBottomMass = Bottom.Mass;
-
-		rotationSpeedRads = Mathf.DegToRad(RotationSpeedDegrees);
+		
+		ikTargetOffset = IKTarget.GlobalPosition - Top.GlobalPosition;
 	}
-	
 	
 	
 	public override void _PhysicsProcess(double delta)
 	{
-		// Move
-		Vector2 direction = Input.GetVector("ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown");
-		// Top.LinearVelocity = direction * MoveSpeed;
-		Top.ApplyImpulse(direction * MoveSpeed * relativeTopMass *  0.02f);
-		Middle.ApplyImpulse(direction * MoveSpeed * relativeMiddleMass * 0.02f);
-		Bottom.ApplyImpulse(direction * MoveSpeed * relativeBottomMass * 0.02f);
+		// Move claw
+		Vector2 direction = Input.GetVector("Left", "Right", "Up", "Down");
 		
-		// Calculate rotation
-		float rotationTopInput = Input.GetAxis("RotateLeft", "RotateRight");
-		float rotationMiddleInput = -Input.GetAxis("Left", "Right"); // is flipped for some reason, so negative
-		float rotationBottomInput = Input.GetAxis("Up", "Down");
+		Vector2 movement = direction * MoveSpeed;
 		
-		// Apply Rotation
-		Top.AngularVelocity = rotationTopInput * rotationSpeedRads * 3;
-		Middle.AngularVelocity = rotationMiddleInput * rotationSpeedRads * relativeMiddleMass;
-		Bottom.AngularVelocity = rotationBottomInput * rotationSpeedRads * relativeBottomMass;
+		Top.ApplyCentralForce(movement * relativeTopMass);
+		Middle.ApplyCentralForce(movement * relativeMiddleMass);
+		Bottom.ApplyCentralForce(movement * relativeBottomMass);
 		
-		// Top.ApplyTorqueImpulse(rotationTopInput * rotationSpeedRads * 3);
-		// Middle.ApplyTorqueImpulse(rotationMiddleInput * rotationSpeedRads * relativeMiddleMass);
-		// Bottom.ApplyTorqueImpulse(rotationBottomInput * rotationSpeedRads * relativeBottomMass);
+		
+		// Move IK target
+		Vector2 ikDirection = Input.GetVector(
+			"ArrowLeft",
+			"ArrowRight",
+			"ArrowUp",
+			"ArrowDown"
+		);
+		
+		ikTargetOffset += ikDirection * MoveSpeed * (float)delta;
+		
+		
+		// Constrain IK target to a fixed distance from the claw
+		if (ikTargetOffset.Length() > IKTargetMaxDistance)
+		{
+			ikTargetOffset = ikTargetOffset.Normalized() * IKTargetMaxDistance;
+		}
+		
+		
+		// Position target relative to claw
+		IKTarget.GlobalPosition = Top.GlobalPosition + ikTargetOffset;
+		
+		
+		// Get IK solved rotations
+		float topRotation = TopBone.GlobalRotation;
+		float middleRotation = MiddleBone.GlobalRotation;
+		float bottomRotation = BottomBone.GlobalRotation;
+		
+		
+		// Apply IK rotations to physical claw
+		Top.AngularVelocity = Mathf.AngleDifference(
+			Top.GlobalRotation,
+			topRotation
+		) * 20f;
+		
+		Middle.AngularVelocity = Mathf.AngleDifference(
+			Middle.GlobalRotation,
+			middleRotation
+		) * 20f;
+		
+		Bottom.AngularVelocity = Mathf.AngleDifference(
+			Bottom.GlobalRotation,
+			bottomRotation
+		) * 20f;
 	}
 	
 

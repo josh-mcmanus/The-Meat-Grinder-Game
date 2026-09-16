@@ -1,0 +1,5 @@
+create a seperate c# project for testing, inside of Test folder
+this way i can just run dotnet test Tests/Tests.csproj
+and it will run all of the tests
+
+also got to do this on windows? i think maybe or maybe not

@@ -1,0 +1,123 @@
+[gd_scene format=3 uid="uid://llw6v1rvfi0n"]
+
+[ext_resource type="Texture2D" uid="uid://dvg5ej0fylqqx" path="res://Assets/icon.svg" id="1_4qutg"]
+[ext_resource type="Script" uid="uid://bvv7goixaqhm0" path="res://Code/Chain.cs" id="2_jnnf6"]
+[ext_resource type="PackedScene" uid="uid://bli0b8f3x10dt" path="res://Scenes/meat_cube.tscn" id="3_wxilx"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_hunv0"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_7b218"]
+radius = 6.0
+height = 20.0
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_hunv0"]
+
+[node name="Chain" type="Node2D" unique_id=957196630]
+
+[node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=630696852]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" unique_id=2037697066]
+shape = SubResource("CapsuleShape2D_hunv0")
+
+[node name="PinJoint2D" type="PinJoint2D" parent="." unique_id=572201429]
+position = Vector2(0, 15)
+node_a = NodePath("../StaticBody2D")
+node_b = NodePath("../segment")
+
+[node name="segment" type="RigidBody2D" parent="." unique_id=814271639]
+position = Vector2(0, 25)
+
+[node name="Sprite2D" type="Sprite2D" parent="segment" unique_id=269754317]
+scale = Vector2(0.095, 0.155)
+texture = ExtResource("1_4qutg")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="segment" unique_id=2049303292]
+shape = SubResource("CapsuleShape2D_7b218")
+
+[node name="PinJoint2D2" type="PinJoint2D" parent="." unique_id=1775950111]
+position = Vector2(0, 35)
+node_a = NodePath("../segment")
+node_b = NodePath("../segment2")
+
+[node name="segment2" type="RigidBody2D" parent="." unique_id=498552372]
+position = Vector2(0, 45)
+
+[node name="Sprite2D" type="Sprite2D" parent="segment2" unique_id=880097888]
+scale = Vector2(0.095, 0.155)
+texture = ExtResource("1_4qutg")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="segment2" unique_id=20318269]
+shape = SubResource("CapsuleShape2D_7b218")
+
+[node name="PinJoint2D3" type="PinJoint2D" parent="." unique_id=344123681]
+position = Vector2(0, 55)
+node_a = NodePath("../segment2")
+node_b = NodePath("../segment3")
+
+[node name="segment3" type="RigidBody2D" parent="." unique_id=225592295]
+position = Vector2(0, 65)
+
+[node name="Sprite2D" type="Sprite2D" parent="segment3" unique_id=839620499]
+scale = Vector2(0.095, 0.155)
+texture = ExtResource("1_4qutg")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="segment3" unique_id=1694429289]
+shape = SubResource("CapsuleShape2D_7b218")
+
+[node name="PinJoint2D4" type="PinJoint2D" parent="." unique_id=153165362]
+position = Vector2(0, 75)
+node_a = NodePath("../segment3")
+node_b = NodePath("../segment4")
+
+[node name="segment4" type="RigidBody2D" parent="." unique_id=615967030]
+position = Vector2(0, 85)
+
+[node name="Sprite2D" type="Sprite2D" parent="segment4" unique_id=1634572236]
+scale = Vector2(0.095, 0.155)
+texture = ExtResource("1_4qutg")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="segment4" unique_id=226092515]
+shape = SubResource("CapsuleShape2D_7b218")
+
+[node name="PinJoint2D5" type="PinJoint2D" parent="." unique_id=949386704]
+position = Vector2(0, 95)
+node_a = NodePath("../segment4")
+node_b = NodePath("../segment5")
+
+[node name="segment5" type="RigidBody2D" parent="." unique_id=797600077]
+position = Vector2(0, 105)
+
+[node name="Sprite2D" type="Sprite2D" parent="segment5" unique_id=193519649]
+scale = Vector2(0.095, 0.155)
+texture = ExtResource("1_4qutg")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="segment5" unique_id=255519892]
+shape = SubResource("CapsuleShape2D_7b218")
+
+[node name="PinJoint2D6" type="PinJoint2D" parent="." unique_id=1762111606]
+position = Vector2(0, 115)
+node_a = NodePath("../segment5")
+node_b = NodePath("../segment6")
+angular_limit_enabled = true
+
+[node name="segment6" type="RigidBody2D" parent="." unique_id=1069917769 node_paths=PackedStringArray("abovePart", "joint")]
+position = Vector2(0, 125)
+script = ExtResource("2_jnnf6")
+abovePart = NodePath("../segment5")
+joint = NodePath("../PinJoint2D6")
+
+[node name="Sprite2D" type="Sprite2D" parent="segment6" unique_id=1764935264]
+scale = Vector2(0.095, 0.155)
+texture = ExtResource("1_4qutg")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="segment6" unique_id=191019570]
+shape = SubResource("CapsuleShape2D_7b218")
+
+[node name="StaticBody2D2" type="StaticBody2D" parent="." unique_id=612942783]
+position = Vector2(64, 139)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D2" unique_id=716739359]
+shape = SubResource("WorldBoundaryShape2D_hunv0")
+
+[node name="Meat Cube" parent="." unique_id=356658779 instance=ExtResource("3_wxilx")]
+position = Vector2(71, 36)

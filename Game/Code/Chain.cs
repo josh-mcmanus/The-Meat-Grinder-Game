@@ -31,15 +31,15 @@ public partial class Chain : RigidBody2D
 	public override void _PhysicsProcess(double delta)
 	{
 		float dt = (float)delta;
-		float newLimitLower = abovePart.GlobalRotation + lowerLimitRads;
-		float newLimitUpper = abovePart.GlobalRotation + upperLimitRads;
-		
+		float newLimitLower = CalculateAbsoluteAngleLimit(abovePart.GlobalRotation, lowerLimitRads);
+		float newLimitUpper = CalculateAbsoluteAngleLimit(abovePart.GlobalRotation, upperLimitRads);
+
 		// Offset the joints angular limit to the rotation of its above part, if it changed since last physics tick
-		if (Math.Round(joint.AngularLimitLower, 2) != Math.Round(newLimitLower, 2))
+		if (!EvaluateNumsRounded(joint.AngularLimitLower, newLimitLower, 2))
 		{
 			joint.AngularLimitLower = newLimitLower;
 		}
-		if (Math.Round(joint.AngularLimitUpper, 2) != Math.Round(newLimitUpper, 2))
+		if (!EvaluateNumsRounded(joint.AngularLimitUpper, newLimitUpper, 2))
 		{
 			joint.AngularLimitUpper = newLimitUpper;
 		}
@@ -54,14 +54,11 @@ public partial class Chain : RigidBody2D
 			return;
 		}
 		
-		float nextAngularVelocity = AngularVelocity + rotationSpeed / inertia * dt;
-		float nextRotation = Rotation + nextAngularVelocity * dt;
-		
-		
+		float nextRotation = CalculateRotationNextPhysicsTick(AngularVelocity, rotationSpeed, inertia, dt, Rotation);
+
 		// Next physics tick rotation would be out of bounds, so stop
-		if (nextRotation <= newLimitLower || nextRotation >= newLimitUpper)
+		if (IsRotationOutsideLimits(nextRotation, newLimitLower, newLimitUpper))
 		{
-			// Utils.Log(TAG, "Next physics tick is out of bounds, stopping torque");
 			return;
 		}
 		
@@ -74,4 +71,40 @@ public partial class Chain : RigidBody2D
 		}
 		
 	}
+	
+	
+	// Angular limit relative to above part
+	public static float CalculateAbsoluteAngleLimit(float aboveRotationRads, float relativeLimitRads)
+	{
+		return aboveRotationRads + relativeLimitRads;
+	}
+	
+	
+	// Both input angular limits are equal when rounded to n decimal places
+	public static bool EvaluateNumsRounded(float oldAngularLimit, float newAngularLimit, int decimalPlaces)
+	{
+		return Math.Round(oldAngularLimit, decimalPlaces) == Math.Round(newAngularLimit, decimalPlaces);
+	}
+	
+	// Angular velocity next physics tick, of the rigidbody node assigned this script
+	public static float CaluclateAngularVelocityNextPhysicsTick(float angularVelocity, float torque, float inertia, float delta)
+	{
+		return angularVelocity + torque / inertia * delta;
+	}
+	
+	// Rotation in next physics tick, of the rigidbody node assigned this script
+	public static float CalculateRotationNextPhysicsTick(float angularVelocity, float rotationSpeed, float inertia, float delta, float rotation)
+	{
+		float nextAngularVelocity = CaluclateAngularVelocityNextPhysicsTick(angularVelocity, rotationSpeed, inertia, delta);
+		
+		return rotation + nextAngularVelocity * delta;
+	}
+	
+	// Rotation is outside the bounds of the lower and upper limit
+	public static bool IsRotationOutsideLimits(float rotation, float lowerLimit, float upperLimit)
+	{
+		return rotation <= lowerLimit || rotation >= upperLimit;
+	}
+	
+	
 }

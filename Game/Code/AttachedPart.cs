@@ -2,9 +2,7 @@ using Godot;
 using System;
 
 
-/*
-	TODO: Rename to something generic
-	
+/*	
 	Used for attaching a single rigid body to a soft body.
 	The rigid body has 2 attachment points, JointA and JointB.
 	Connect both joints NodeA's to a different bone, and NodeB's to the rigidbody

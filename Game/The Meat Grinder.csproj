@@ -3,6 +3,9 @@
     <TargetFramework>net8.0</TargetFramework>
     <TargetFramework Condition=" '$(GodotTargetPlatform)' == 'android' ">net9.0</TargetFramework>
     <EnableDynamicLoading>true</EnableDynamicLoading>
-    <RootNamespace>softbody2dtest2</RootNamespace>
+    <RootNamespace>TheMeatGrinder</RootNamespace>
   </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Tests\Tests.csproj" />
+  </ItemGroup>
 </Project>

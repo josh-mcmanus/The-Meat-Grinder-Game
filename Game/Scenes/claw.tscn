@@ -10,11 +10,12 @@
 [sub_resource type="Gradient" id="Gradient_wb80u"]
 colors = PackedColorArray(0.5924475, 2.201982e-06, 4.3317675e-07, 1, 0.34615496, 3.3691526e-07, 2.4065375e-07, 1)
 
-[node name="Claw" type="Node2D" unique_id=1200115391 node_paths=PackedStringArray("Top", "Middle", "Bottom")]
+[node name="Claw" type="Node2D" unique_id=1200115391 node_paths=PackedStringArray("Top", "Middle", "Bottom", "MouseFollowPoint")]
 script = ExtResource("1_hlywp")
 Top = NodePath("Top")
 Middle = NodePath("Middle")
 Bottom = NodePath("Bottom")
+MouseFollowPoint = NodePath("")
 
 [node name="Top" type="RigidBody2D" parent="." unique_id=1396914014]
 position = Vector2(63, -71)

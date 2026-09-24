@@ -3,15 +3,16 @@ using System;
 
 public partial class ClawMove : Node2D
 {
+	private const string TAG = "ClawMove";
 	
 	[Export] public RigidBody2D Top;
 	[Export] public RigidBody2D Middle;
 	[Export] public RigidBody2D Bottom;
 	
 	
-	
-	private const float MoveSpeed = 300f;
-	private const float RotationSpeedDegrees = 45f;
+	private const float MoveSpeed = 6;
+	private const float RotationSpeedDegrees = 45;
+	private const float MouseControl_MaxSpeedAtDistance = 100;
 	
 	private float rotationSpeedRads;
 	private float relativeTopMass;
@@ -45,27 +46,68 @@ public partial class ClawMove : Node2D
 	
 	public override void _PhysicsProcess(double delta)
 	{
-		// Move
-		Vector2 direction = Input.GetVector("ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown");
-		// Top.LinearVelocity = direction * MoveSpeed;
-		Top.ApplyImpulse(direction * MoveSpeed * relativeTopMass *  0.02f);
-		Middle.ApplyImpulse(direction * MoveSpeed * relativeMiddleMass * 0.02f);
-		Bottom.ApplyImpulse(direction * MoveSpeed * relativeBottomMass * 0.02f);
+		MoveClaw();
+		RotateClaw();
+	}
+	
+	private void MoveClaw()
+	{
+		Vector2 movementVector = Settings.inputMode switch
+		{
+			Settings.InputMode.Mouse_and_Keyboard => GetMouseMovement(),
+			Settings.InputMode.Controller => GetControllerMovement(),
+			_ => Vector2.Zero,
+		};
+
+		if (movementVector == Vector2.Zero) return;
 		
+		Top.ApplyImpulse(movementVector * MoveSpeed * relativeTopMass);
+		Middle.ApplyImpulse(movementVector * MoveSpeed * relativeMiddleMass);
+		Bottom.ApplyImpulse(movementVector * MoveSpeed * relativeBottomMass);
+	}
+	
+	private Vector2 GetMouseMovement()
+	{
+		Vector2 mouseOffset = GetGlobalMousePosition() - Top.GlobalPosition;
+		
+		float distance = mouseOffset.Length();
+		
+		if(distance == 0)
+		{
+			return Vector2.Zero;
+		}
+		
+		float strength = Mathf.Clamp(distance / MouseControl_MaxSpeedAtDistance, 0, 1);
+		
+		Vector2 direction = mouseOffset / distance;
+		
+		return direction * strength;
+	}
+	
+	private Vector2 GetControllerMovement()
+	{
+		Vector2 joystickInput = Input.GetVector("Left", "Right", "Up", "Down");
+
+		if (joystickInput.Length() < Settings.deadzone)
+		{
+			return Vector2.Zero;
+		}
+		
+		return joystickInput;
+	}
+	
+	
+	private void RotateClaw()
+	{
 		// Calculate rotation
 		float rotationTopInput = Input.GetAxis("RotateLeft", "RotateRight");
-		float rotationMiddleInput = -Input.GetAxis("Left", "Right"); // is flipped for some reason, so negative
+		float rotationMiddleInput = Input.GetAxis("Right", "Left");
 		float rotationBottomInput = Input.GetAxis("Up", "Down");
 		
 		// Apply Rotation
 		Top.AngularVelocity = rotationTopInput * rotationSpeedRads * 3;
 		Middle.AngularVelocity = rotationMiddleInput * rotationSpeedRads * relativeMiddleMass;
 		Bottom.AngularVelocity = rotationBottomInput * rotationSpeedRads * relativeBottomMass;
-		
-		// Top.ApplyTorqueImpulse(rotationTopInput * rotationSpeedRads * 3);
-		// Middle.ApplyTorqueImpulse(rotationMiddleInput * rotationSpeedRads * relativeMiddleMass);
-		// Bottom.ApplyTorqueImpulse(rotationBottomInput * rotationSpeedRads * relativeBottomMass);
 	}
 	
-
 }

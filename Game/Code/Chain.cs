@@ -33,7 +33,7 @@ public partial class Chain : RigidBody2D
 		float dt = (float)delta;
 		float newLimitLower = CalculateAbsoluteAngleLimit(abovePart.GlobalRotation, lowerLimitRads);
 		float newLimitUpper = CalculateAbsoluteAngleLimit(abovePart.GlobalRotation, upperLimitRads);
-
+		
 		// Offset the joints angular limit to the rotation of its above part, if it changed since last physics tick
 		if (!EvaluateNumsRounded(joint.AngularLimitLower, newLimitLower, 2))
 		{
@@ -55,7 +55,7 @@ public partial class Chain : RigidBody2D
 		}
 		
 		float nextRotation = CalculateRotationNextPhysicsTick(AngularVelocity, rotationSpeed, inertia, dt, Rotation);
-
+		
 		// Next physics tick rotation would be out of bounds, so stop
 		if (IsRotationOutsideLimits(nextRotation, newLimitLower, newLimitUpper))
 		{
@@ -64,11 +64,11 @@ public partial class Chain : RigidBody2D
 		
 		
 		// Get and apply rotation to part
-		float axis = Input.GetAxis("Right", "Left");
-		if (axis != 0)
-		{
-			ApplyTorque(axis * rotationSpeed);
-		}
+		// float axis = Input.GetAxis("Right", "Left");
+		// if (axis != 0)
+		// {
+		// 	ApplyTorque(axis * rotationSpeed);
+		// }
 		
 	}
 	
@@ -93,9 +93,9 @@ public partial class Chain : RigidBody2D
 	}
 	
 	// Rotation in next physics tick, of the rigidbody node assigned this script
-	public static float CalculateRotationNextPhysicsTick(float angularVelocity, float rotationSpeed, float inertia, float delta, float rotation)
+	public static float CalculateRotationNextPhysicsTick(float angularVelocity, float angularSpeed, float inertia, float delta, float rotation)
 	{
-		float nextAngularVelocity = CaluclateAngularVelocityNextPhysicsTick(angularVelocity, rotationSpeed, inertia, delta);
+		float nextAngularVelocity = CaluclateAngularVelocityNextPhysicsTick(angularVelocity, angularSpeed, inertia, delta);
 		
 		return rotation + nextAngularVelocity * delta;
 	}

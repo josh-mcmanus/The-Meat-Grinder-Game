@@ -1,8 +1,7 @@
 [gd_scene format=3 uid="uid://c5hql31mh8nby"]
 
 [ext_resource type="Script" uid="uid://bvv7goixaqhm0" path="res://Code/Chain.cs" id="1_4gpl2"]
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_wb3uj"]
+[ext_resource type="Script" uid="uid://cspp5euyjynpl" path="res://Code/Claw2.cs" id="1_43hp3"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_7fu3q"]
 size = Vector2(20, 76)
@@ -13,18 +12,14 @@ size = Vector2(20, 76)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_cdoam"]
 size = Vector2(20, 76)
 
-[node name="Claw 2" type="Node2D" unique_id=664647308]
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_fpyuh"]
+
+[node name="Claw 2" type="Node2D" unique_id=664647308 node_paths=PackedStringArray("Top", "Middle", "Bottom")]
 position = Vector2(194, 72)
-
-[node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=180438628]
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" unique_id=1627318665]
-shape = SubResource("RectangleShape2D_wb3uj")
-
-[node name="PinJoint2D" type="PinJoint2D" parent="." unique_id=1179186235]
-position = Vector2(0, 10)
-node_a = NodePath("../StaticBody2D")
-node_b = NodePath("../RigidBody2D")
+script = ExtResource("1_43hp3")
+Top = NodePath("RigidBody2D")
+Middle = NodePath("RigidBody2D2")
+Bottom = NodePath("RigidBody2D3")
 
 [node name="RigidBody2D" type="RigidBody2D" parent="." unique_id=2115662457]
 position = Vector2(0, 48)
@@ -36,9 +31,16 @@ shape = SubResource("RectangleShape2D_7fu3q")
 position = Vector2(0, 86)
 node_a = NodePath("../RigidBody2D")
 node_b = NodePath("../RigidBody2D2")
+motor_enabled = true
+motor_target_velocity = 3.4906585
 
-[node name="RigidBody2D2" type="RigidBody2D" parent="." unique_id=1755453709]
+[node name="RigidBody2D2" type="RigidBody2D" parent="." unique_id=1755453709 node_paths=PackedStringArray("abovePart", "joint")]
 position = Vector2(0, 124)
+script = ExtResource("1_4gpl2")
+abovePart = NodePath("../RigidBody2D")
+joint = NodePath("../PinJoint2D2")
+lowerLimitDegrees = -90.0
+upperLimitDegrees = -60.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="RigidBody2D2" unique_id=935030558]
 shape = SubResource("RectangleShape2D_j64a6")
@@ -47,6 +49,8 @@ shape = SubResource("RectangleShape2D_j64a6")
 position = Vector2(0, 162)
 node_a = NodePath("../RigidBody2D2")
 node_b = NodePath("../RigidBody2D3")
+motor_enabled = true
+motor_target_velocity = 3.4906585
 
 [node name="RigidBody2D3" type="RigidBody2D" parent="." unique_id=1147497456 node_paths=PackedStringArray("abovePart", "joint")]
 position = Vector2(0, 200)
@@ -58,3 +62,9 @@ upperLimitDegrees = -20.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="RigidBody2D3" unique_id=2015333911]
 shape = SubResource("RectangleShape2D_cdoam")
+
+[node name="StaticBody2D2" type="StaticBody2D" parent="." unique_id=1897299859]
+position = Vector2(108, 485)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D2" unique_id=86108823]
+shape = SubResource("WorldBoundaryShape2D_fpyuh")

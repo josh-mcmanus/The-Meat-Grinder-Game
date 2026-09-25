@@ -40,6 +40,8 @@ public partial class ClawMove : Node2D
 		relativeBottomMass = Bottom.Mass;
 
 		rotationSpeedRads = Mathf.DegToRad(RotationSpeedDegrees);
+		
+		// HapticTest();
 	}
 	
 	
@@ -50,16 +52,31 @@ public partial class ClawMove : Node2D
 		RotateClaw();
 	}
 	
+	
+	private void HapticTest()
+	{
+		Utils.Log(TAG, Input.HasJoyVibration(0));
+		
+		const int   Device = 0;
+		const float WeakMotorStrength = 0;
+		const float StrongMotorStrength = 0.1f;
+		const float DurationSeconds = 2;
+		
+		Input.StartJoyVibration(Device, WeakMotorStrength, StrongMotorStrength, DurationSeconds);
+	}
+	
+	
 	private void MoveClaw()
 	{
-		Vector2 movementVector = Settings.inputMode switch
+		Vector2 movementVector = DataManager.settingsData.ControlMode switch
 		{
-			Settings.InputMode.Mouse_and_Keyboard => GetMouseMovement(),
-			Settings.InputMode.Controller => GetControllerMovement(),
+			SettingsData.InputMode.KeyboardAndMouse => GetMouseMovement(),
+			SettingsData.InputMode.Controller => GetControllerRightStickMovement(),
 			_ => Vector2.Zero,
 		};
-
-		if (movementVector == Vector2.Zero) return;
+		
+		if (movementVector == Vector2.Zero)
+			return;
 		
 		Top.ApplyImpulse(movementVector * MoveSpeed * relativeTopMass);
 		Middle.ApplyImpulse(movementVector * MoveSpeed * relativeMiddleMass);
@@ -84,11 +101,14 @@ public partial class ClawMove : Node2D
 		return direction * strength;
 	}
 	
-	private Vector2 GetControllerMovement()
+	// This is specifically for moving the claw around on controller, as it does not have mouse coordinates
+	private Vector2 GetControllerRightStickMovement()
 	{
-		Vector2 joystickInput = Input.GetVector("Left", "Right", "Up", "Down");
-
-		if (joystickInput.Length() < Settings.deadzone)
+		Vector2 joystickInput = Input.GetVector("MoveLeft", "MoveRight", "MoveUp", "MoveDown");
+		
+		// Utils.Log(TAG, joystickInput);
+		
+		if (joystickInput.Length() < DataManager.settingsData.Deadzone)
 		{
 			return Vector2.Zero;
 		}

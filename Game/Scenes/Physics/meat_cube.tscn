@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://bli0b8f3x10dt"]
 
-[ext_resource type="Script" uid="uid://cmcpeoo2xl5h5" path="res://Code/AttachedPart.cs" id="1_1fkxc"]
+[ext_resource type="Script" uid="uid://cmcpeoo2xl5h5" path="res://Code/Physics/AttachedPart.cs" id="1_1fkxc"]
 [ext_resource type="Texture2D" uid="uid://sai2uqoycfs1" path="res://Assets/Meat Cube 1.png" id="1_dwvpo"]
 [ext_resource type="Script" uid="uid://kol6k5y6rb8a" path="res://addons/softbody2d/softbody2d.gd" id="2_1fkxc"]
 

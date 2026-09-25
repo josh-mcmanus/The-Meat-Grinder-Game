@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://67l14gdo45o0"]
 
-[ext_resource type="PackedScene" uid="uid://dyfk0k1nfp2oi" path="res://Scenes/claw.tscn" id="1_8gbba"]
-[ext_resource type="PackedScene" uid="uid://c3tpxpqkbalg0" path="res://Scenes/meat_long_1.tscn" id="2_jjvhh"]
-[ext_resource type="PackedScene" uid="uid://bli0b8f3x10dt" path="res://Scenes/meat_cube.tscn" id="3_kry3j"]
+[ext_resource type="PackedScene" uid="uid://dyfk0k1nfp2oi" path="res://Scenes/Physics/claw.tscn" id="1_8gbba"]
+[ext_resource type="PackedScene" uid="uid://c3tpxpqkbalg0" path="res://Scenes/Physics/meat_long_1.tscn" id="2_jjvhh"]
+[ext_resource type="PackedScene" uid="uid://bli0b8f3x10dt" path="res://Scenes/Physics/meat_cube.tscn" id="3_kry3j"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_7fu3q"]
 size = Vector2(860, 400)

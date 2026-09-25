@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://c5hql31mh8nby"]
 
-[ext_resource type="Script" uid="uid://bvv7goixaqhm0" path="res://Code/Chain.cs" id="1_4gpl2"]
-[ext_resource type="Script" uid="uid://cspp5euyjynpl" path="res://Code/Claw2.cs" id="1_43hp3"]
+[ext_resource type="Script" uid="uid://bvv7goixaqhm0" path="res://Code/Old/Chain.cs" id="1_4gpl2"]
+[ext_resource type="Script" uid="uid://cspp5euyjynpl" path="res://Code/Old/Claw2.cs" id="1_43hp3"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_7fu3q"]
 size = Vector2(20, 76)

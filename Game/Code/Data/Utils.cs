@@ -8,6 +8,7 @@ public partial class Utils
 	// Debug mode, prints out debug information
 	public const bool DEBUG = true;
 	
+	
 	public static void Log(string TAG, object msg)
 	{
         if (!DEBUG) return;
@@ -19,6 +20,5 @@ public partial class Utils
 		if (!DEBUG) return;
         GD.PrintErr($"[{TAG}] {msg}");
 	}
-	
 	
 }

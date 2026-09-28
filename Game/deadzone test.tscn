@@ -1,0 +1,25 @@
+[gd_scene format=3 uid="uid://l5n1ldhkkfb6"]
+
+[ext_resource type="Script" uid="uid://cpwpv04vbe78" path="res://DeadzoneTest.cs" id="1_oc4ur"]
+
+[node name="Control" type="Control" unique_id=45287212]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_oc4ur")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=2066135645]
+layout_mode = 0
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+
+[node name="ColorRect2" type="ColorRect" parent="." unique_id=1307544568]
+layout_mode = 0
+offset_right = 1.0
+offset_bottom = 1.0
+color = Color(0, 0, 0, 1)

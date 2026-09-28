@@ -45,11 +45,38 @@ public partial class ClawMove : Node2D
 	}
 	
 	
+	// Switch control scheme based on current input method
+	public override void _Input(InputEvent @event)
+	{
+		// Controller
+		if (@event is InputEventJoypadButton)
+		{
+			DataManager.settingsData.ControlMode = SettingsData.InputMode.Controller;
+			return;
+		}
+		if (@event is InputEventJoypadMotion motion)
+		{
+			if (Math.Abs(motion.AxisValue) > DataManager.settingsData.Deadzone)
+			{
+				DataManager.settingsData.ControlMode = SettingsData.InputMode.Controller;
+			}
+			return;
+		}
+		
+		// KBM
+		if (@event is InputEventKey || @event is InputEventMouseButton || @event is InputEventMouseMotion)
+		{
+			DataManager.settingsData.ControlMode = SettingsData.InputMode.KeyboardAndMouse;
+		}
+	}
+	
 	
 	public override void _PhysicsProcess(double delta)
 	{
 		MoveClaw();
 		RotateClaw();
+		
+		// Utils.Log(TAG, DataManager.settingsData.ControlMode);
 	}
 	
 	
@@ -61,8 +88,12 @@ public partial class ClawMove : Node2D
 		const float WeakMotorStrength = 0;
 		const float StrongMotorStrength = 0.1f;
 		const float DurationSeconds = 2;
+
+		if (Input.GetConnectedJoypads() != null)
+		{
+			Input.StartJoyVibration(Device, WeakMotorStrength, StrongMotorStrength, DurationSeconds);
+		}
 		
-		Input.StartJoyVibration(Device, WeakMotorStrength, StrongMotorStrength, DurationSeconds);
 	}
 	
 	

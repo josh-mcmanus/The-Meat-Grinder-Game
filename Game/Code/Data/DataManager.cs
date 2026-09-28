@@ -10,7 +10,7 @@ public partial class DataManager : Node
 	
 	public static PlayerData playerData = new();
     public static SettingsData settingsData = new();
-    public enum SaveTypes { player, game }
+    public enum   SaveTypes { player, game }
 
 
 	public override void _Ready()
@@ -194,6 +194,9 @@ public partial class DataManager : Node
 	// Settings
 	private static void ApplyAllSettings()
 	{
+		// Game Window
+		DisplayServer.WindowSetSize(new Vector2I(settingsData.ResolutionWidth, settingsData.ResolutionHeight));
+		
 		switch (settingsData.Window)
 		{
 			case SettingsData.WindowMode.Windowed:
@@ -212,10 +215,6 @@ public partial class DataManager : Node
 				break;
 		}
 		
-		GD.Print(DisplayServer.WindowGetMode());
-		
-		DisplayServer.WindowSetSize(new Vector2I(settingsData.ResolutionWidth, settingsData.ResolutionHeight));
-
 		switch (settingsData.VSync)
 		{
 			case SettingsData.VSyncMode.Disabled:
@@ -235,18 +234,8 @@ public partial class DataManager : Node
 				break;
 		}
 		
-		DisplayServer.WindowSetVsyncMode(DisplayServer.VSyncMode.Enabled);
+		
 	}
-	
-    // Set project settings
-    // public static void SetProjectSettings()
-    // {
-    //     // https://docs.godotengine.org/en/stable/tutorials/editor/project_settings.html
-    //     // https://docs.godotengine.org/en/stable/classes/class_projectsettings.html
-        
-        
-    //     // ProjectSettings.SetSetting("display/window/size/mode", gameSettings.fullScreen);
-    // }
     
     
 }

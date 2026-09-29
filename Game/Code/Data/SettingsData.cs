@@ -4,7 +4,8 @@ public class SettingsData
 {
 	// Controller
 	public InputMode ControlMode { get; set; } = InputMode.Controller;
-	public float Deadzone { get; set; } = 0.1f;
+	public float DeadzoneLeft { get; set; } = 0.05f;
+	public float DeadzoneRight { get; set; } = 0.05f;
 	
 	//Video Settings
     public WindowMode Window { get; set; } = WindowMode.Windowed;

@@ -3,42 +3,40 @@ using System;
 
 public partial class DeadzoneTest : Control
 {
-	private float axis = 0;
-	private Vector2 prevRight = Vector2.Zero;
-	private Vector2 prevLeft = Vector2.Zero;
+	[Export] Sprite2D area;
+	[Export] Sprite2D cursor;
+	[Export] Sprite2D deadzoneCircle;
 	
-	
-	
+	private Vector2 radius        = Vector2.Zero;
+	private Vector2 cursorRadius  = Vector2.Zero;
+	private Vector2 useableRadius = Vector2.Zero;
 	
 	
 	public override void _Ready()
 	{
-		GD.Print(Input.GetConnectedJoypads());
+		radius = area.Texture.GetSize() / 2;
+		cursorRadius = cursor.Texture.GetSize() / 2;
+		
+		useableRadius = radius - cursorRadius;
 	}
 	
 	
-	
-	public override void _Process(double delta)
+	public void SetCursorPosition(Vector2 joystickAxis)
 	{
-		float LX = Input.GetJoyAxis(0, JoyAxis.LeftX);
-		float LY = Input.GetJoyAxis(0, JoyAxis.LeftY);
-		Vector2 leftStickAxis = new(LX, LY);
+		cursor.SetPosition(joystickAxis.LimitLength(1) * useableRadius);
+	}
+	
+	public void SetDeadzone(float input)
+	{
+		float deadzone = Mathf.Clamp(input, 0, 1);
 		
-		float RX = Input.GetJoyAxis(0, JoyAxis.RightX);
-		float RY = Input.GetJoyAxis(0, JoyAxis.RightY);
-		Vector2 rightStickAxis = new(RX, RY);
+		deadzoneCircle.Scale = Vector2.One * deadzone;
 		
-		if (leftStickAxis != prevLeft)
-		{
-			GD.Print("LEFT: " + leftStickAxis);
-		}
-		if (rightStickAxis != prevRight)
-		{
-			GD.Print("RIGHT: " + rightStickAxis);
-		}
+		GradientTexture2D texture = deadzoneCircle.Texture as GradientTexture2D;
 		
-		prevLeft  = leftStickAxis;
-		prevRight = rightStickAxis;
+		float middle = Mathf.Lerp(0.66f, 0.70f, deadzone);
+		
+		texture.Gradient.SetOffset(1, middle);
 	}
 	
 }

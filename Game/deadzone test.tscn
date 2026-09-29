@@ -2,24 +2,63 @@
 
 [ext_resource type="Script" uid="uid://cpwpv04vbe78" path="res://DeadzoneTest.cs" id="1_oc4ur"]
 
-[node name="Control" type="Control" unique_id=45287212]
+[sub_resource type="Gradient" id="Gradient_oc4ur"]
+interpolation_mode = 1
+offsets = PackedFloat32Array(0, 0.118987344, 0.24050634, 0.41518986, 0.5822785, 0.6746836, 0.7012658, 0.7107843)
+colors = PackedColorArray(0.4745098, 0, 0.015686275, 1, 0.40536696, 0, 0.013400561, 1, 0.33622408, 0, 0.011114847, 1, 0.26708123, 0, 0.008829132, 1, 0.19793838, 0, 0.0065434175, 1, 0.12879553, 0, 0.004257703, 1, 0, 0, 0, 1, 1, 1, 1, 0)
+metadata/_snap_count = 2
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_fpyuh"]
+gradient = SubResource("Gradient_oc4ur")
+width = 300
+height = 300
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+
+[sub_resource type="Gradient" id="Gradient_v1jda"]
+interpolation_mode = 1
+offsets = PackedFloat32Array(0, 0.26708862)
+colors = PackedColorArray(0, 0, 0, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_60xd1"]
+gradient = SubResource("Gradient_v1jda")
+width = 20
+height = 20
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+
+[sub_resource type="Gradient" id="Gradient_c3hxb"]
+interpolation_mode = 1
+offsets = PackedFloat32Array(0, 0.7, 0.71)
+colors = PackedColorArray(1, 1, 1, 0.19607843, 1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_sh855"]
+gradient = SubResource("Gradient_c3hxb")
+width = 300
+height = 300
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+
+[node name="Control" type="Control" unique_id=45287212 node_paths=PackedStringArray("area", "cursor", "deadzoneCircle")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_right = -1152.0
+offset_bottom = -648.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_oc4ur")
+area = NodePath("Area")
+cursor = NodePath("Dot")
+deadzoneCircle = NodePath("Deadzone")
 
-[node name="ColorRect" type="ColorRect" parent="." unique_id=2066135645]
-layout_mode = 0
-offset_left = -20.0
-offset_top = -20.0
-offset_right = 20.0
-offset_bottom = 20.0
+[node name="Area" type="Sprite2D" parent="." unique_id=996450191]
+texture_filter = 1
+texture = SubResource("GradientTexture2D_fpyuh")
 
-[node name="ColorRect2" type="ColorRect" parent="." unique_id=1307544568]
-layout_mode = 0
-offset_right = 1.0
-offset_bottom = 1.0
-color = Color(0, 0, 0, 1)
+[node name="Dot" type="Sprite2D" parent="." unique_id=463966017]
+texture = SubResource("GradientTexture2D_60xd1")
+
+[node name="Deadzone" type="Sprite2D" parent="." unique_id=2042332044]
+texture = SubResource("GradientTexture2D_sh855")

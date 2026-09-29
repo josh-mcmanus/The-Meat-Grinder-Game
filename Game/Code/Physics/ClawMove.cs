@@ -56,7 +56,14 @@ public partial class ClawMove : Node2D
 		}
 		if (@event is InputEventJoypadMotion motion)
 		{
-			if (Math.Abs(motion.AxisValue) > DataManager.settingsData.Deadzone)
+			float deadzone = motion.Axis switch
+			{
+				JoyAxis.LeftX  or JoyAxis.LeftY  => DataManager.settingsData.DeadzoneLeft,
+				JoyAxis.RightX or JoyAxis.RightY => DataManager.settingsData.DeadzoneRight,
+				_ => 1
+			};
+			
+			if (Math.Abs(motion.AxisValue) > deadzone)
 			{
 				DataManager.settingsData.ControlMode = SettingsData.InputMode.Controller;
 			}
@@ -137,9 +144,7 @@ public partial class ClawMove : Node2D
 	{
 		Vector2 joystickInput = Input.GetVector("MoveLeft", "MoveRight", "MoveUp", "MoveDown");
 		
-		// Utils.Log(TAG, joystickInput);
-		
-		if (joystickInput.Length() < DataManager.settingsData.Deadzone)
+		if (joystickInput.Length() < DataManager.settingsData.DeadzoneRight)
 		{
 			return Vector2.Zero;
 		}
@@ -150,15 +155,39 @@ public partial class ClawMove : Node2D
 	
 	private void RotateClaw()
 	{
-		// Calculate rotation
-		float rotationTopInput = Input.GetAxis("RotateLeft", "RotateRight");
+		// Get rotation
+		float rotationTopInput    = Input.GetAxis("RotateLeft", "RotateRight");
 		float rotationMiddleInput = Input.GetAxis("Right", "Left");
 		float rotationBottomInput = Input.GetAxis("Up", "Down");
+		
+		// Deadzone
+		if (DataManager.settingsData.ControlMode == SettingsData.InputMode.Controller)
+		{
+			Vector2 joystickInput = Input.GetVector("Left", "Right", "Up", "Down");
+
+			if (joystickInput.Length() < DataManager.settingsData.DeadzoneLeft)
+			{
+				rotationMiddleInput = 0;
+				rotationBottomInput = 0;
+			}
+		}
 		
 		// Apply Rotation
 		Top.AngularVelocity = rotationTopInput * rotationSpeedRads * 3;
 		Middle.AngularVelocity = rotationMiddleInput * rotationSpeedRads * relativeMiddleMass;
 		Bottom.AngularVelocity = rotationBottomInput * rotationSpeedRads * relativeBottomMass;
 	}
+	
+	// private float ApplyDeadzone(float input, float deadzone)
+	// {
+	// 	float magnitude = Mathf.Abs(input);
+
+	// 	if (magnitude <= deadzone)
+	// 	{
+	// 		return 0.0f;
+	// 	}
+		
+	// 	return Mathf.Sign(input) * ((magnitude - deadzone) / (1.0f - deadzone));
+	// }
 	
 }

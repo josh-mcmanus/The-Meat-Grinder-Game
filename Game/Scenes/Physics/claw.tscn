@@ -228,7 +228,7 @@ motor_target_velocity = 0.034906585
 [node name="TopConnectiveTissueController" type="Node2D" parent="." unique_id=244249644 node_paths=PackedStringArray("StartPoints", "EndPoints")]
 script = ExtResource("6_5a08a")
 StartPoints = [NodePath("../Top/Connective Markers/Marker"), NodePath("../Top/Connective Markers/Marker2D"), NodePath("../Top/Connective Markers/Marker2D2"), NodePath("../Top/Connective Markers/Marker2D3"), NodePath("../Top/Connective Markers/Marker2D4"), NodePath("../Top/Connective Markers/Marker2D5"), NodePath("../Top/Connective Markers/Marker2D6"), NodePath("../Top/Connective Markers/Marker2D7")]
-EndPoints = [NodePath("../Middle/Connective Markers/Marker 2"), NodePath("../Middle/Connective Markers/Marker2D"), NodePath("../Middle/Connective Markers/Marker2D2"), NodePath("../Middle/Connective Markers/Marker2D3"), NodePath("../Middle/Connective Markers/Marker2D4"), NodePath("../Middle/Connective Markers/Marker2D5"), NodePath("../Middle/Connective Markers/Marker2D6"), NodePath("../Middle/Connective Markers/Marker2D7")]
+EndPoints = [NodePath("../Middle/Connective Markers/Marker 2"), NodePath("../Middle/Connective Markers/Marker2D"), NodePath("../Middle/Connective Markers/Marker2D2"), NodePath("../Middle/Connective Markers 2/Marker2D3"), NodePath("../Middle/Connective Markers/Marker2D4"), NodePath("../Middle/Connective Markers/Marker2D5"), NodePath("../Middle/Connective Markers/Marker2D6"), NodePath("../Middle/Connective Markers/Marker2D7")]
 
 [node name="BottomConnectiveTissueController" type="Node2D" parent="." unique_id=288435259 node_paths=PackedStringArray("StartPoints", "EndPoints")]
 script = ExtResource("6_5a08a")

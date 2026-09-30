@@ -23,7 +23,7 @@ window/stretch/aspect="expand"
 
 [dotnet]
 
-project/assembly_name="soft body 2d test 2"
+project/assembly_name="The Meat Grinder"
 
 [editor_plugins]
 

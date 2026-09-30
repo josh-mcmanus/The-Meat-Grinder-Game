@@ -1,0 +1,114 @@
+[gd_scene format=3 uid="uid://bt64icx8vukah"]
+
+[ext_resource type="Script" uid="uid://k2qmqlfyjg82" path="res://Code/User Interface/DeadzoneMenu.cs" id="1_kuqdj"]
+[ext_resource type="PackedScene" uid="uid://l5n1ldhkkfb6" path="res://Scenes/User Interface/deadzone test.tscn" id="2_v544u"]
+
+[node name="Deadzone menu" type="Control" unique_id=185872785 node_paths=PackedStringArray("deadzoneLeft", "deadzoneRight", "deadzoneTextInputLeft", "deadzoneSliderInputLeft", "deadzoneTextInputRight", "deadzoneSliderInputRight")]
+process_mode = 3
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_kuqdj")
+deadzoneLeft = NodePath("MarginContainer/VBoxContainer/HBoxContainer2/Deadzone L")
+deadzoneRight = NodePath("MarginContainer/VBoxContainer/HBoxContainer2/Deadzone R")
+deadzoneTextInputLeft = NodePath("MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer/Left Text Input")
+deadzoneSliderInputLeft = NodePath("MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer/Left Slider")
+deadzoneTextInputRight = NodePath("MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/Right Text Input")
+deadzoneSliderInputRight = NodePath("MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/Right Slider")
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1850667756]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=1496927639]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer" unique_id=903966998]
+layout_mode = 2
+text = "Deadzone"
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=1398813134]
+layout_mode = 2
+
+[node name="Deadzone L" parent="MarginContainer/VBoxContainer/HBoxContainer2" unique_id=45287212 instance=ExtResource("2_v544u")]
+layout_mode = 2
+
+[node name="Deadzone R" parent="MarginContainer/VBoxContainer/HBoxContainer2" unique_id=1295512982 instance=ExtResource("2_v544u")]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=30542498]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/VBoxContainer" unique_id=913477156]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer" unique_id=1106327194]
+custom_minimum_size = Vector2(45, 0)
+layout_mode = 2
+text = "Left"
+
+[node name="Left Text Input" type="LineEdit" parent="MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer" unique_id=175622996]
+layout_mode = 2
+placeholder_text = "0.05"
+max_length = 4
+emoji_menu_enabled = false
+
+[node name="Left Slider" type="HSlider" parent="MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer" unique_id=548907626]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+max_value = 1.0
+step = 0.01
+tick_count = 20
+ticks_on_borders = true
+ticks_position = 3
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="MarginContainer/VBoxContainer/VBoxContainer" unique_id=1183374115]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2" unique_id=1231559301]
+custom_minimum_size = Vector2(45, 0)
+layout_mode = 2
+text = "Right"
+
+[node name="Right Text Input" type="LineEdit" parent="MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2" unique_id=1692862686]
+layout_mode = 2
+placeholder_text = "0.05"
+max_length = 4
+emoji_menu_enabled = false
+
+[node name="Right Slider" type="HSlider" parent="MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2" unique_id=504983082]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+max_value = 1.0
+step = 0.01
+tick_count = 20
+ticks_on_borders = true
+ticks_position = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=1705160744]
+layout_mode = 2
+
+[node name="Save Button" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer" unique_id=299236029]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Save"
+
+[node name="Cancel Button" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer" unique_id=732182271]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Cancel"
+
+[connection signal="text_changed" from="MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer/Left Text Input" to="." method="OnDeadzoneTextChangedLeft"]
+[connection signal="text_submitted" from="MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer/Left Text Input" to="." method="OnDeadzoneTextSubmitLeft"]
+[connection signal="value_changed" from="MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer/Left Slider" to="." method="OnSliderValueChangedLeft"]
+[connection signal="text_changed" from="MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/Right Text Input" to="." method="OnDeadzoneTextChangedRight"]
+[connection signal="text_submitted" from="MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/Right Text Input" to="." method="OnDeadzoneTextSubmitRight"]
+[connection signal="value_changed" from="MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/Right Slider" to="." method="OnSliderValueChangedRight"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer/Save Button" to="." method="SaveButtonPressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer/Cancel Button" to="." method="CancelButtonPressed"]

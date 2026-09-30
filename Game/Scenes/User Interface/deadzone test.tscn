@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://l5n1ldhkkfb6"]
 
-[ext_resource type="Script" uid="uid://cpwpv04vbe78" path="res://DeadzoneTest.cs" id="1_oc4ur"]
+[ext_resource type="Script" uid="uid://cpwpv04vbe78" path="res://Code/User Interface/Deadzone.cs" id="1_oc4ur"]
 
 [sub_resource type="Gradient" id="Gradient_oc4ur"]
 interpolation_mode = 1
@@ -40,14 +40,17 @@ fill = 1
 fill_from = Vector2(0.5, 0.5)
 
 [node name="Control" type="Control" unique_id=45287212 node_paths=PackedStringArray("area", "cursor", "deadzoneCircle")]
+custom_minimum_size = Vector2(300, 300)
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_right = -1152.0
-offset_bottom = -648.0
+offset_right = -852.0
+offset_bottom = -348.0
 grow_horizontal = 2
 grow_vertical = 2
+offset_transform_enabled = true
+offset_transform_position = Vector2(150, 150)
 script = ExtResource("1_oc4ur")
 area = NodePath("Area")
 cursor = NodePath("Dot")

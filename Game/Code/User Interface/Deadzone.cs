@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-public partial class DeadzoneTest : Control
+public partial class Deadzone : Control
 {
 	[Export] Sprite2D area;
 	[Export] Sprite2D cursor;
@@ -18,6 +18,13 @@ public partial class DeadzoneTest : Control
 		cursorRadius = cursor.Texture.GetSize() / 2;
 		
 		useableRadius = radius - cursorRadius;
+		
+		// duplicate texture and gradient so both deadzones dont share the same resource
+		GradientTexture2D texture = deadzoneCircle.Texture.Duplicate() as GradientTexture2D;
+		
+		texture.Gradient = texture.Gradient.Duplicate() as Gradient;
+		
+		deadzoneCircle.Texture = texture;
 	}
 	
 	

@@ -16,7 +16,7 @@ public class SettingsData
 	//Audio Volumes
     public float MasterVolume { get; set; } = 0.5f;
     public float MusicVolume { get; set; } = 0.5f;
-    public float SoundEffectVolume { get; set; } = 0.5f;
+    public float SFXVolume { get; set; } = 0.5f;
     public float UIVolume { get; set; } = 0.5f;
 	
 	

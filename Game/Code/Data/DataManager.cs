@@ -16,7 +16,7 @@ public partial class DataManager : Node
 	public override void _Ready()
 	{
 		LoadAllData();
-		ApplyAllSettings();
+		ApplyAllSettingsStartup();
 	}
 
 	
@@ -192,7 +192,7 @@ public partial class DataManager : Node
     
 	
 	// Settings
-	private static void ApplyAllSettings()
+	private static void ApplyAllSettingsStartup()
 	{
 		// Game Window
 		DisplayServer.WindowSetSize(new Vector2I(settingsData.ResolutionWidth, settingsData.ResolutionHeight));

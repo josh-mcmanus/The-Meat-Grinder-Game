@@ -33,7 +33,7 @@ public partial class Deadzone : Control
 		cursor.SetPosition(joystickAxis.LimitLength(1) * useableRadius);
 	}
 	
-	public void SetDeadzone(float input)
+	public void SetDeadzoneUI(float input)
 	{
 		float deadzone = Mathf.Clamp(input, 0, 1);
 		

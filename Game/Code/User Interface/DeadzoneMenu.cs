@@ -4,6 +4,8 @@ using System.Text.RegularExpressions;
 
 public partial class DeadzoneMenu : Control
 {
+	private const string TAG = "DeadzoneMenu";
+	
 	[Export] Deadzone deadzoneLeft;
 	[Export] Deadzone deadzoneRight;
 	
@@ -21,15 +23,20 @@ public partial class DeadzoneMenu : Control
 	
 	public override void _Ready()
 	{
-		// GD.Print(Input.GetConnectedJoypads());
+		// Load saved deadzones for UI
+		deadzoneLeft.SetDeadzoneUI(DataManager.settingsData.DeadzoneLeft);
+		deadzoneTextInputLeft.Text = DataManager.settingsData.DeadzoneLeft.ToString("F2");
+		deadzoneSliderInputLeft.Value = DataManager.settingsData.DeadzoneLeft;
 		
-		deadzoneLeft.SetDeadzone(DataManager.settingsData.DeadzoneLeft);
-		deadzoneRight.SetDeadzone(DataManager.settingsData.DeadzoneRight);
+		deadzoneRight.SetDeadzoneUI(DataManager.settingsData.DeadzoneRight);
+		deadzoneTextInputRight.Text = DataManager.settingsData.DeadzoneRight.ToString("F2");
+		deadzoneSliderInputRight.Value = DataManager.settingsData.DeadzoneRight;
 		
-		GD.Print("DeadzoneMenu ready");
+		Utils.Log(TAG, "Deadzone Menu Loaded");
 	}
 	
 	
+	// Get and set analog stick position on deadzone ui
 	public override void _Process(double delta)
 	{
 		// GradientDeadzoneTest();
@@ -63,98 +70,60 @@ public partial class DeadzoneMenu : Control
 	
 	// Validate if the text is a valid float
 	// Update UI elements and deadzone setting
-	private void ValidateFloatSubmission(string text, LineEdit textField, HSlider slider, Side side)
+	private void OnDeadzoneTextSubmit(string text, LineEdit textField, HSlider slider, Side side)
 	{
-		if (!float.TryParse(text, out float inputNum))
+		float? inputNum  = Menu.ValidateStringIsFloat(text);
+		
+        if (inputNum is float value)
 		{
-			return;
+            float result = Menu.ClampFloat(value, 0.00f, 1.00f);
+            UpdateLineEditAndSlider(result, textField, slider, side);
 		}
-		
-		inputNum = Mathf.Clamp(inputNum, 0.00f, 1.00f);
-		
-		UpdateLineEditAndSlider(inputNum, textField, slider, side);
 	}
 	
 	
-	// Validate that the input text is in the correct format
-	// only in the format   x.xx   , where x is any digit, called at every text change
-	// so   x   x.   x.x   are all valid
-	private void ValidateTextInput(string text, int oldCaretPos, LineEdit textField)
-	{
-		string filteredText = "";
-		bool hasDecimal = false;
-		int newCaretPos = 0;
-		
 	
-		for(int i = 0; i < text.Length; i++)
-		{
-			char c = text[i];
-			bool valid = false;
-			
-			if (char.IsNumber(c))
-			{
-				valid = true;
-			}
-			else if (c == '.' && !hasDecimal && i == 1)
-			{
-				valid = true;
-				hasDecimal = true;
-			}
-			
-			if (valid)
-			{
-				filteredText += c;
-
-				if (i < oldCaretPos)
-				{
-					newCaretPos++;
-				}
-			}
-		}
-		
-		textField.Text = filteredText;
-		textField.CaretColumn = newCaretPos;
-	}
-	
-	
+	// Updates the line edit field and slider to be the input float
+	// Sets the deadzone (Datamanager.settingsData not save file) of the corresponding side to the input
 	private void UpdateLineEditAndSlider(float input, LineEdit textField, HSlider slider, Side side)
 	{
-		textField.Text = input.ToString();
+		textField.Text = input.ToString("F2");
 		slider.Value = input;
 		
 		if (side == Side.Left)
 		{
-			deadzoneLeft.SetDeadzone(input);
+			deadzoneLeft.SetDeadzoneUI(input);
 			DataManager.settingsData.DeadzoneLeft = input;
 		}
 		else
 		{
-			deadzoneRight.SetDeadzone(input);
+			deadzoneRight.SetDeadzoneUI(input);
 			DataManager.settingsData.DeadzoneRight = input;
 		}
 	}
 	
 	
 	
+	
 	private void OnDeadzoneTextSubmitLeft(string text)
 	{
-		ValidateFloatSubmission(text, deadzoneTextInputLeft, deadzoneSliderInputLeft, Side.Left);
+		OnDeadzoneTextSubmit(text, deadzoneTextInputLeft, deadzoneSliderInputLeft, Side.Left);
 	}
 	
 	private void OnDeadzoneTextSubmitRight(string text)
 	{
-		ValidateFloatSubmission(text, deadzoneTextInputRight, deadzoneSliderInputRight, Side.Right);
+		OnDeadzoneTextSubmit(text, deadzoneTextInputRight, deadzoneSliderInputRight, Side.Right);
 	}
 	
 	
 	private void OnDeadzoneTextChangedLeft(string text)
 	{
-		ValidateTextInput(text, deadzoneTextInputLeft.CaretColumn, deadzoneTextInputLeft);
+		Menu.SetLineEditText(text, deadzoneTextInputLeft.CaretColumn, deadzoneTextInputLeft);
 	}
 	
 	private void OnDeadzoneTextChangedRight(string text)
 	{
-		ValidateTextInput(text, deadzoneTextInputRight.CaretColumn, deadzoneTextInputRight);
+		Menu.SetLineEditText(text, deadzoneTextInputRight.CaretColumn, deadzoneTextInputRight);
 	}
 	
 	
@@ -193,8 +162,8 @@ public partial class DeadzoneMenu : Control
 	{
 		float deadzoneTest = Mathf.Lerp(0.05f, 0.95f, Mathf.PingPong(Time.GetTicksMsec() / 5000.0f, 1.0f));
 		
-		deadzoneLeft.SetDeadzone(deadzoneTest);
-		deadzoneRight.SetDeadzone(deadzoneTest);
+		deadzoneLeft.SetDeadzoneUI(deadzoneTest);
+		deadzoneRight.SetDeadzoneUI(deadzoneTest);
 	}
 	
 	

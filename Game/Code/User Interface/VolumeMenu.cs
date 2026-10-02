@@ -6,158 +6,156 @@ public partial class VolumeMenu : Control
 	private const string TAG = "VolumeMenu";
 	
 	
-	[Export] LineEdit masterInput;
-	[Export] LineEdit musicInput;
-	[Export] LineEdit soundEffectInput;
-	[Export] LineEdit userInterfaceInput;
+	[Export] LineEdit masterLineEdit;
+	[Export] LineEdit musicLineEdit;
+	[Export] LineEdit SFXLineEdit;
+	[Export] LineEdit UILineEdit;
 	
 	[Export] HSlider masterSlider;
 	[Export] HSlider musicSlider;
-	[Export] HSlider soundEffectSlider;
-	[Export] HSlider userInterfaceSlider;
+	[Export] HSlider SFXSlider;
+	[Export] HSlider UISlider;
+	
+	[Export] AudioStreamPlayer musicPlayer;
+	
+	
+	private VolumeControl[] volumeControls;
+	
 	
 	
 	public override void _Ready()
 	{
-		masterInput.Text = DataManager.settingsData.MasterVolume.ToString("F2");
-		musicInput.Text = DataManager.settingsData.MusicVolume.ToString("F2");
-		soundEffectInput.Text = DataManager.settingsData.SFXVolume.ToString("F2");
-		userInterfaceInput.Text = DataManager.settingsData.UIVolume.ToString("F2");
+		volumeControls = 
+		[
+			new(masterLineEdit, masterSlider, VolumeType.Master),
+			new(musicLineEdit, musicSlider, VolumeType.Music),
+			new(SFXLineEdit, SFXSlider, VolumeType.SFX),
+			new(UILineEdit, UISlider, VolumeType.UI),
+		];
 		
-		masterSlider.Value = DataManager.settingsData.MasterVolume;
-		musicSlider.Value = DataManager.settingsData.MusicVolume;
-		soundEffectSlider.Value = DataManager.settingsData.SFXVolume;
-		userInterfaceSlider.Value = DataManager.settingsData.UIVolume;
+		LoadAllVolumeData();
+		
+		musicPlayer.Play();
 		
 		Utils.Log(TAG, "Volume Menu Loaded");
+		
+		
+		// Connect UI to functions
+		masterLineEdit.TextSubmitted += text => OnVolumeTextSubmit(volumeControls[0], text);
+		musicLineEdit.TextSubmitted += text => OnVolumeTextSubmit(volumeControls[1], text);
+		SFXLineEdit.TextSubmitted += text => OnVolumeTextSubmit(volumeControls[2], text);
+		UILineEdit.TextSubmitted += text => OnVolumeTextSubmit(volumeControls[3], text);
+		
+		masterLineEdit.TextChanged += text => Menu.SetLineEditText(text, masterLineEdit.CaretColumn, masterLineEdit);
+		musicLineEdit.TextChanged += text => Menu.SetLineEditText(text, musicLineEdit.CaretColumn, musicLineEdit);
+		SFXLineEdit.TextChanged += text => Menu.SetLineEditText(text, SFXLineEdit.CaretColumn, SFXLineEdit);
+		UILineEdit.TextChanged += text => Menu.SetLineEditText(text, UILineEdit.CaretColumn, UILineEdit);
+		
+		masterSlider.ValueChanged += value => UpdateVolume(volumeControls[0], (float)value);
+		musicSlider.ValueChanged += value => UpdateVolume(volumeControls[1], (float)value);
+		SFXSlider.ValueChanged += value => UpdateVolume(volumeControls[2], (float)value);
+		UISlider.ValueChanged += value => UpdateVolume(volumeControls[3], (float)value);
+		
 	}
 	
 	
+	// Set UI elements, audio player volume, and save to settingsData
+	private void UpdateVolume(VolumeControl control, float value)
+	{
+		control.LineEdit.Text = value.ToString("F2");
+		control.Slider.Value = value;
+		
+		AudioServer.SetBusVolumeDb((int)control.Type, Mathf.LinearToDb(value));
+		
+		SetVolume(control.Type, value);
+	}
 	
-	private void OnVolumeTextSubmit(string text, LineEdit textField, HSlider slider, VolumeType type)
+	// Return volume for a specified type
+	private float GetVolume(VolumeType type)
+	{
+		return type switch
+		{
+			VolumeType.Master => DataManager.settingsData.MasterVolume,
+			VolumeType.Music => DataManager.settingsData.MusicVolume,
+			VolumeType.SFX => DataManager.settingsData.SFXVolume,
+			VolumeType.UI => DataManager.settingsData.UIVolume,
+			_ => 1.0f
+		};
+	}
+	
+	// Save volume to settingsData for a specified type
+	private void SetVolume(VolumeType type, float value)
+	{
+		switch (type)
+		{
+			case VolumeType.Master:
+				DataManager.settingsData.MasterVolume = value;
+				break;
+			
+			case VolumeType.Music:
+				DataManager.settingsData.MusicVolume = value;
+				break;
+			
+			case VolumeType.SFX:
+				DataManager.settingsData.SFXVolume = value;
+				break;
+			
+			case VolumeType.UI:
+				DataManager.settingsData.UIVolume = value;
+				break;
+		}
+	}
+	
+	
+	// Run when line edit field data is submitted (Enter, Controller confirm, etc)
+	// Updates volume if the submitted string is valid
+	private void OnVolumeTextSubmit(VolumeControl control, string text)
 	{
 		float? inputNum  = Menu.ValidateStringIsFloat(text);
 		
         if (inputNum is float value)
 		{
             float result = Menu.ClampFloat(value, 0.00f, 1.00f);
-            UpdateLineEditAndSlider(result, textField, slider, type);
-		}
-	}
-	
-	
-	private void UpdateLineEditAndSlider(float input, LineEdit textField, HSlider slider, VolumeType type)
-	{
-		textField.Text = input.ToString("F2");
-		slider.Value = input;
-		
-		switch (type)
-		{
-			case VolumeType.Master:
-				DataManager.settingsData.MasterVolume = input;
-				break;
-			
-			case VolumeType.Music:
-				DataManager.settingsData.MasterVolume = input;
-				break;
-			
-			case VolumeType.SFX:
-				DataManager.settingsData.MasterVolume = input;
-				break;
-			
-			case VolumeType.UI:
-				DataManager.settingsData.MasterVolume = input;
-				break;
+			UpdateVolume(control, result);
 		}
 	}
 	
 	
 	
-	private void OnLineEditMasterSubmit(string text)
-	{
-		OnVolumeTextSubmit(text, masterInput, masterSlider, VolumeType.Master);
-	}
-	
-	private void OnLineEditMusicSubmit(string text)
-	{
-		OnVolumeTextSubmit(text, musicInput, musicSlider, VolumeType.Music);
-	}
-	
-	private void OnLineEditSFXSubmit(string text)
-	{
-		OnVolumeTextSubmit(text, soundEffectInput, soundEffectSlider, VolumeType.SFX);
-	}
-	
-	private void OnLineEditUISubmit(string text)
-	{
-		OnVolumeTextSubmit(text, userInterfaceInput, userInterfaceSlider, VolumeType.UI);
-	}
-	
-	
-	private void OnLineEditMasterChanged(string text)
-	{
-		Menu.SetLineEditText(text, masterInput.CaretColumn, masterInput);
-	}
-	
-	private void OnLineEditMusicChanged(string text)
-	{
-		Menu.SetLineEditText(text, musicInput.CaretColumn, musicInput);
-	}
-	
-	private void OnLineEditSFXChanged(string text)
-	{
-		Menu.SetLineEditText(text, soundEffectInput.CaretColumn, soundEffectInput);
-	}
-	
-	private void OnLineEditUIChanged(string text)
-	{
-		Menu.SetLineEditText(text, userInterfaceInput.CaretColumn, userInterfaceInput);
-	}
-	
-	
-	private void OnSliderMasterChanged(float value)
-	{
-		UpdateLineEditAndSlider(value, masterInput, masterSlider, VolumeType.Master);
-	}
-	
-	private void OnSliderMusicChanged(float value)
-	{
-		UpdateLineEditAndSlider(value, musicInput, musicSlider, VolumeType.Music);
-	}
-	
-	private void OnSliderSFXChanged(float value)
-	{
-		UpdateLineEditAndSlider(value, soundEffectInput, soundEffectSlider, VolumeType.SFX);
-	}
-	
-	private void OnSliderUIChanged(float value)
-	{
-		UpdateLineEditAndSlider(value, userInterfaceInput, userInterfaceSlider, VolumeType.UI);
-	}
-	
-	
-	
-	// Save all changes to settings file
+	// Save ALL changes to settings file
 	private void SaveButtonPressed()
 	{
 		DataManager.SaveGameSettings();
 	}
 	
-	// Cancel all settings and load settings file
+	// Dont save any changes, load saved settings data
 	private void CancelButtonPressed()
 	{
 		DataManager.LoadGameSettings();
-		
-		UpdateLineEditAndSlider(DataManager.settingsData.MasterVolume, masterInput, masterSlider, VolumeType.Master);
-		UpdateLineEditAndSlider(DataManager.settingsData.MusicVolume, musicInput, musicSlider, VolumeType.Music);
-		UpdateLineEditAndSlider(DataManager.settingsData.SFXVolume, soundEffectInput, soundEffectSlider, VolumeType.SFX);
-		UpdateLineEditAndSlider(DataManager.settingsData.UIVolume, userInterfaceInput, userInterfaceSlider, VolumeType.UI);
+
+		LoadAllVolumeData();
+	}
+	
+	// Load and set all volume data from settings
+	private void LoadAllVolumeData()
+	{
+		foreach (VolumeControl control in volumeControls)
+		{
+			UpdateVolume(control, GetVolume(control.Type));
+		}
 	}
 	
 	
-	
-	
-	private enum VolumeType
+	private struct VolumeControl(LineEdit lineEdit, HSlider slider, VolumeMenu.VolumeType type)
+    {
+		public LineEdit LineEdit = lineEdit;
+		public HSlider Slider = slider;
+		public VolumeType Type = type;
+    }
+
+
+
+    private enum VolumeType
 	{
 		Master,
 		Music,

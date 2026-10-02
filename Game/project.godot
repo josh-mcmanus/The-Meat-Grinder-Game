@@ -15,16 +15,26 @@ run/main_scene="uid://67l14gdo45o0"
 config/features=PackedStringArray("4.7", "C#", "GL Compatibility")
 config/icon="res://Assets/Old/icon.svg"
 
+[audio]
+
+buses/default_bus_layout="uid://peppk64l2le6"
+
 [autoload]
 
 DataManager="*uid://cs40vmg4w2t1f"
 
 [display]
 
+window/size/viewport_width=1280
+window/size/viewport_height=720
 window/size/mode=2
 window/size/resizable=false
 window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
+window/canvas_textures/default_texture_filter=1
+window/quality/screen_space_aa=0
+window/quality/msaa_2d=0
+window/hdr_2d=false
 
 [dotnet]
 

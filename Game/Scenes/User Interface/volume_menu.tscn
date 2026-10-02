@@ -1,8 +1,9 @@
 [gd_scene format=3 uid="uid://2skd1hftr8x"]
 
 [ext_resource type="Script" uid="uid://nnuag210ahw0" path="res://Code/User Interface/VolumeMenu.cs" id="1_doibh"]
+[ext_resource type="AudioStream" uid="uid://sjykvltbaj7x" path="res://Money Makes Money.mp3" id="2_r7hh6"]
 
-[node name="Volume menu" type="Control" unique_id=1622174431 node_paths=PackedStringArray("masterInput", "musicInput", "soundEffectInput", "userInterfaceInput", "masterSlider", "musicSlider", "soundEffectSlider", "userInterfaceSlider")]
+[node name="Volume menu" type="Control" unique_id=1622174431 node_paths=PackedStringArray("masterLineEdit", "musicLineEdit", "SFXLineEdit", "UILineEdit", "masterSlider", "musicSlider", "SFXSlider", "UISlider", "musicPlayer")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -10,132 +11,139 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_doibh")
-masterInput = NodePath("VBoxContainer/Master/Master Input")
-musicInput = NodePath("VBoxContainer/Music/Music Input")
-soundEffectInput = NodePath("VBoxContainer/SFX/SFX Input")
-userInterfaceInput = NodePath("VBoxContainer/UI/UI Input")
-masterSlider = NodePath("VBoxContainer/Master/Master Slider")
-musicSlider = NodePath("VBoxContainer/Music/Music Slider")
-soundEffectSlider = NodePath("VBoxContainer/SFX/SFX Slider")
-userInterfaceSlider = NodePath("VBoxContainer/UI/UI Slider")
+masterLineEdit = NodePath("MarginContainer/VBoxContainer/Master/Master Line Edit")
+musicLineEdit = NodePath("MarginContainer/VBoxContainer/Music/Music Line Edit")
+SFXLineEdit = NodePath("MarginContainer/VBoxContainer/SFX/SFX Line Edit")
+UILineEdit = NodePath("MarginContainer/VBoxContainer/UI/UI Line Edit")
+masterSlider = NodePath("MarginContainer/VBoxContainer/Master/Master Slider")
+musicSlider = NodePath("MarginContainer/VBoxContainer/Music/Music Slider")
+SFXSlider = NodePath("MarginContainer/VBoxContainer/SFX/SFX Slider")
+UISlider = NodePath("MarginContainer/VBoxContainer/UI/UI Slider")
+musicPlayer = NodePath("AudioStreamPlayer Music Test")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1192898087]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=360399837]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
-[node name="Label" type="Label" parent="VBoxContainer" unique_id=1256481267]
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=1192898087]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer" unique_id=1256481267]
 layout_mode = 2
 text = "Volume"
 
-[node name="Master" type="HBoxContainer" parent="VBoxContainer" unique_id=499625573]
+[node name="Master" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=499625573]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="VBoxContainer/Master" unique_id=231148421]
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/Master" unique_id=231148421]
 custom_minimum_size = Vector2(60, 0)
 layout_mode = 2
 text = "Master"
 
-[node name="Master Input" type="LineEdit" parent="VBoxContainer/Master" unique_id=594744032]
+[node name="Master Line Edit" type="LineEdit" parent="MarginContainer/VBoxContainer/Master" unique_id=594744032]
 layout_mode = 2
 placeholder_text = "0.50"
 
-[node name="Master Slider" type="HSlider" parent="VBoxContainer/Master" unique_id=2053888493]
+[node name="Master Slider" type="HSlider" parent="MarginContainer/VBoxContainer/Master" unique_id=2053888493]
 custom_minimum_size = Vector2(400, 0)
 layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
 max_value = 1.0
 step = 0.01
-tick_count = 20
+tick_count = 21
 ticks_on_borders = true
 ticks_position = 3
 
-[node name="Music" type="HBoxContainer" parent="VBoxContainer" unique_id=254842687]
+[node name="Music" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=254842687]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="VBoxContainer/Music" unique_id=2105680828]
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/Music" unique_id=2105680828]
 custom_minimum_size = Vector2(60, 0)
 layout_mode = 2
 text = "Music"
 
-[node name="Music Input" type="LineEdit" parent="VBoxContainer/Music" unique_id=1474976982]
+[node name="Music Line Edit" type="LineEdit" parent="MarginContainer/VBoxContainer/Music" unique_id=1474976982]
 layout_mode = 2
 placeholder_text = "0.50"
 
-[node name="Music Slider" type="HSlider" parent="VBoxContainer/Music" unique_id=1443343170]
+[node name="Music Slider" type="HSlider" parent="MarginContainer/VBoxContainer/Music" unique_id=1443343170]
 custom_minimum_size = Vector2(400, 0)
 layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
 max_value = 1.0
 step = 0.01
-tick_count = 20
+tick_count = 21
 ticks_on_borders = true
 ticks_position = 3
 
-[node name="SFX" type="HBoxContainer" parent="VBoxContainer" unique_id=729072408]
+[node name="SFX" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=729072408]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="VBoxContainer/SFX" unique_id=378402488]
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/SFX" unique_id=378402488]
 custom_minimum_size = Vector2(60, 0)
 layout_mode = 2
 text = "SFX"
 
-[node name="SFX Input" type="LineEdit" parent="VBoxContainer/SFX" unique_id=1286704412]
+[node name="SFX Line Edit" type="LineEdit" parent="MarginContainer/VBoxContainer/SFX" unique_id=1286704412]
 layout_mode = 2
 placeholder_text = "0.50"
 
-[node name="SFX Slider" type="HSlider" parent="VBoxContainer/SFX" unique_id=284760849]
+[node name="SFX Slider" type="HSlider" parent="MarginContainer/VBoxContainer/SFX" unique_id=284760849]
 custom_minimum_size = Vector2(400, 0)
 layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
 max_value = 1.0
 step = 0.01
-tick_count = 20
+tick_count = 21
 ticks_on_borders = true
 ticks_position = 3
 
-[node name="UI" type="HBoxContainer" parent="VBoxContainer" unique_id=61635212]
+[node name="UI" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=61635212]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="VBoxContainer/UI" unique_id=585290455]
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/UI" unique_id=585290455]
 custom_minimum_size = Vector2(60, 0)
 layout_mode = 2
 text = "UI"
 
-[node name="UI Input" type="LineEdit" parent="VBoxContainer/UI" unique_id=1228065860]
+[node name="UI Line Edit" type="LineEdit" parent="MarginContainer/VBoxContainer/UI" unique_id=1228065860]
 layout_mode = 2
 placeholder_text = "0.50"
 
-[node name="UI Slider" type="HSlider" parent="VBoxContainer/UI" unique_id=341861470]
+[node name="UI Slider" type="HSlider" parent="MarginContainer/VBoxContainer/UI" unique_id=341861470]
 custom_minimum_size = Vector2(400, 0)
 layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
 max_value = 1.0
 step = 0.01
-tick_count = 20
+tick_count = 21
 ticks_on_borders = true
 ticks_position = 3
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer" unique_id=2118499829]
+[node name="Buttons" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=2118499829]
 layout_mode = 2
 
-[node name="Save" type="Button" parent="VBoxContainer/HBoxContainer" unique_id=594954688]
+[node name="Save" type="Button" parent="MarginContainer/VBoxContainer/Buttons" unique_id=594954688]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Save"
 
-[node name="Cancel" type="Button" parent="VBoxContainer/HBoxContainer" unique_id=1135059182]
+[node name="Cancel" type="Button" parent="MarginContainer/VBoxContainer/Buttons" unique_id=1135059182]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Cancel"
 
-[connection signal="text_changed" from="VBoxContainer/Master/Master Input" to="." method="OnLineEditMasterChanged"]
-[connection signal="text_submitted" from="VBoxContainer/Master/Master Input" to="." method="OnLineEditMasterSubmit"]
-[connection signal="value_changed" from="VBoxContainer/Master/Master Slider" to="." method="OnSliderMasterChanged"]
-[connection signal="text_changed" from="VBoxContainer/Music/Music Input" to="." method="OnLineEditMusicChanged"]
-[connection signal="text_submitted" from="VBoxContainer/Music/Music Input" to="." method="OnLineEditMusicSubmit"]
-[connection signal="value_changed" from="VBoxContainer/Music/Music Slider" to="." method="OnSliderMusicChanged"]
-[connection signal="text_changed" from="VBoxContainer/SFX/SFX Input" to="." method="OnLineEditSFXChanged"]
-[connection signal="text_submitted" from="VBoxContainer/SFX/SFX Input" to="." method="OnLineEditSFXSubmit"]
-[connection signal="value_changed" from="VBoxContainer/SFX/SFX Slider" to="." method="OnSliderSFXChanged"]
-[connection signal="text_changed" from="VBoxContainer/UI/UI Input" to="." method="OnLineEditUIChanged"]
-[connection signal="text_submitted" from="VBoxContainer/UI/UI Input" to="." method="OnLineEditUISubmit"]
-[connection signal="value_changed" from="VBoxContainer/UI/UI Slider" to="." method="OnSliderUIChanged"]
-[connection signal="pressed" from="VBoxContainer/HBoxContainer/Save" to="." method="SaveButtonPressed"]
-[connection signal="pressed" from="VBoxContainer/HBoxContainer/Cancel" to="." method="CancelButtonPressed"]
+[node name="AudioStreamPlayer Music Test" type="AudioStreamPlayer" parent="." unique_id=1248863234]
+stream = ExtResource("2_r7hh6")
+bus = &"Music"
+
+[connection signal="pressed" from="MarginContainer/VBoxContainer/Buttons/Save" to="." method="SaveButtonPressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/Buttons/Cancel" to="." method="CancelButtonPressed"]

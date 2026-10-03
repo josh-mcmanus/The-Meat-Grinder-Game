@@ -125,13 +125,13 @@ public partial class VolumeMenu : Control
 	// Save ALL changes to settings file
 	private void SaveButtonPressed()
 	{
-		DataManager.SaveGameSettings();
+		DataManager.SaveSettingsData();
 	}
 	
 	// Dont save any changes, load saved settings data
 	private void CancelButtonPressed()
 	{
-		DataManager.LoadGameSettings();
+		DataManager.LoadSettingsData();
 
 		LoadAllVolumeData();
 	}

@@ -143,13 +143,13 @@ public partial class DeadzoneMenu : Control
 	// Save all changes to settings file
 	private void SaveButtonPressed()
 	{
-		DataManager.SaveGameSettings();
+		DataManager.SaveGameData();
 	}
 	
 	// Cancel all settings and load settings file
 	private void CancelButtonPressed()
 	{
-		DataManager.LoadGameSettings();
+		DataManager.LoadSettingsData();
 		
 		UpdateLineEditAndSlider(DataManager.settingsData.DeadzoneLeft,  deadzoneTextInputLeft,  deadzoneSliderInputLeft,  Side.Left);
 		UpdateLineEditAndSlider(DataManager.settingsData.DeadzoneRight, deadzoneTextInputRight, deadzoneSliderInputRight, Side.Right);

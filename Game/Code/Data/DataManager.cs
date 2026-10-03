@@ -8,28 +8,30 @@ public partial class DataManager : Node
 	private const string TAG = "DataManager";
 	public  const string GAME_VERSION = "0.1.0 Date: 25/09/26";
 	
-	public static PlayerData playerData = new();
+	public static GameData gameData = new();
     public static SettingsData settingsData = new();
-    public enum   SaveTypes { player, game }
+    public enum   SaveTypes { game, settings }
 
 
 	public override void _Ready()
 	{
+        LaunchSetup();
+        
 		LoadAllData();
-		ApplyAllSettingsStartup();
+		ApplyAllSettings();
 	}
 
 	
     
     // Player data
-    public static void SavePlayerData() { Save(SaveTypes.player); }
-    public static void LoadPlayerData() { Load(SaveTypes.player); }
-    public static void CreateDefaultPlayerData() { CreateDefaultFile(SaveTypes.player); }
+    public static void SaveGameData() { Save(SaveTypes.game); }
+    public static void LoadGameData() { Load(SaveTypes.game); }
+    public static void CreateDefaultGameData() { CreateDefaultFile(SaveTypes.game); }
     
     // Game data
-    public static void SaveGameSettings() { Save(SaveTypes.game); }
-    public static void LoadGameSettings() { Load(SaveTypes.game); }
-    public static void CreateDefaultGameData() { CreateDefaultFile(SaveTypes.game); }
+    public static void SaveSettingsData() { Save(SaveTypes.settings); }
+    public static void LoadSettingsData() { Load(SaveTypes.settings); }
+    public static void CreateDefaultSettingsData() { CreateDefaultFile(SaveTypes.settings); }
     
     
     
@@ -39,7 +41,7 @@ public partial class DataManager : Node
         string filePath = CreateFilePath(saveType);
         
 		// Update current save file version
-		playerData.SaveFileVersion = GAME_VERSION;
+		gameData.SaveFileVersion = GAME_VERSION;
 		
 		
         // Save File Object
@@ -50,15 +52,15 @@ public partial class DataManager : Node
         
         
         // Convert class to json
-        if (saveType == SaveTypes.player)
+        if (saveType == SaveTypes.game)
         {
-            jsonString = JsonSerializer.Serialize(playerData, options);
-            Utils.Log(TAG, "Player data converted to json");
+            jsonString = JsonSerializer.Serialize(gameData, options);
+            Utils.Log(TAG, "Save data converted to json");
         }
-        else if (saveType == SaveTypes.game)
+        else if (saveType == SaveTypes.settings)
         {
             jsonString = JsonSerializer.Serialize(settingsData, options);
-            Utils.Log(TAG, "Game settings converted to json");
+            Utils.Log(TAG, "Settings converted to json");
         }
         else
         {
@@ -97,29 +99,29 @@ public partial class DataManager : Node
         }
         
         
-        // Player data
-        if (saveType == SaveTypes.player)
+        // Save data
+        if (saveType == SaveTypes.game)
         {
-            playerData = JsonSerializer.Deserialize<PlayerData>(jsonString);
+            gameData = JsonSerializer.Deserialize<GameData>(jsonString);
             Utils.Log(TAG, "Player data loaded");
             
-            if(playerData == null)
+            if(gameData == null)
             {
                 Utils.Err(TAG, "Failed to load player data");
-                playerData = new PlayerData();
+                gameData = new GameData();
             }
             return;
         }
         
-        // Game data
-        if (saveType == SaveTypes.game)
+        // Settings data
+        if (saveType == SaveTypes.settings)
         {
             settingsData = JsonSerializer.Deserialize<SettingsData>(jsonString);
-            Utils.Log(TAG, "Game settings loaded");
+            Utils.Log(TAG, "Settings loaded");
             
             if(settingsData == null)
             {
-                Utils.Err(TAG, "Failed to load game data");
+                Utils.Err(TAG, "Failed to load settings data");
                 settingsData = new SettingsData();
             }
         }
@@ -128,24 +130,24 @@ public partial class DataManager : Node
     
     public static void LoadAllData()
     {
-        // Player data
-        if (!DoesFileExist(SaveTypes.player))
+        // Save data
+        if (!DoesFileExist(SaveTypes.game))
         {
 			Utils.Log(TAG, "No save file found");
-            CreateDefaultPlayerData();
-			SavePlayerData();
+            CreateDefaultGameData();
+			SaveGameData();
         }
         
 		// Game settings
-        if (!DoesFileExist(SaveTypes.game))
+        if (!DoesFileExist(SaveTypes.settings))
         {
 			Utils.Log(TAG, "No settings file found");
-			CreateDefaultGameData();
-			SaveGameSettings();
+			CreateDefaultSettingsData();
+			SaveSettingsData();
         }
 		
-        LoadPlayerData();
-		LoadGameSettings();
+        LoadGameData();
+		LoadSettingsData();
     }
     
 	
@@ -155,14 +157,14 @@ public partial class DataManager : Node
     {
         Utils.Log(TAG, "Creating new file with default values");
         
-        if (saveType == SaveTypes.player)
+        if (saveType == SaveTypes.game)
         {
-            playerData = new PlayerData();
-            Utils.Log(TAG, "Default player save file created");
+            gameData = new GameData();
+            Utils.Log(TAG, "Default Save data file created");
             return;
         }
         
-        if (saveType == SaveTypes.game)
+        if (saveType == SaveTypes.settings)
         {
             settingsData = new SettingsData();
             Utils.Log(TAG, "Default game settings file created");
@@ -190,22 +192,42 @@ public partial class DataManager : Node
     }
     
     
+    private static void LaunchSetup()
+    {
+        if (!DoesFileExist(SaveTypes.settings))
+        {
+            Vector2I resolution = Menu.GetPrimaryMonitorResolution();
+            
+            settingsData.DisplayResolutionWidth  = resolution.X;
+            settingsData.DisplayResolutionHeight = resolution.Y;
+            settingsData.Window = SettingsData.WindowMode.FullScreen;
+            
+            SaveSettingsData();
+        }
+    }
+    
+    
 	
 	// Settings
-	private static void ApplyAllSettingsStartup()
+	public static void ApplyAllSettings()
 	{
 		// Game Window
-		DisplayServer.WindowSetSize(new Vector2I(settingsData.ResolutionWidth, settingsData.ResolutionHeight));
+        Vector2I resolution = new(
+            settingsData.DisplayResolutionWidth,
+            settingsData.DisplayResolutionHeight
+        );
 		
 		switch (settingsData.Window)
 		{
 			case SettingsData.WindowMode.Windowed:
 				DisplayServer.WindowSetMode(DisplayServer.WindowMode.Windowed);
 				DisplayServer.WindowSetFlag(DisplayServer.WindowFlags.Borderless, false);
+                DisplayServer.WindowSetSize(resolution);
 				break;
 			
 			case SettingsData.WindowMode.FullScreen:
-				DisplayServer.WindowSetMode(DisplayServer.WindowMode.ExclusiveFullscreen);
+            DisplayServer.WindowSetMode(DisplayServer.WindowMode.Fullscreen);
+				// DisplayServer.WindowSetMode(DisplayServer.WindowMode.ExclusiveFullscreen);
 				DisplayServer.WindowSetFlag(DisplayServer.WindowFlags.Borderless, false);
 				break;
 			
@@ -233,6 +255,7 @@ public partial class DataManager : Node
 				DisplayServer.WindowSetVsyncMode(DisplayServer.VSyncMode.Mailbox);
 				break;
 		}
+		
 		
 		
 	}

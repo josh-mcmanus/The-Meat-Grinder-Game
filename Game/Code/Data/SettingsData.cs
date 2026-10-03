@@ -10,8 +10,10 @@ public class SettingsData
 	//Video Settings
     public WindowMode Window { get; set; } = WindowMode.Windowed;
     public VSyncMode  VSync { get; set; } = VSyncMode.Disabled;
-	public int  ResolutionWidth { get; set; } = 1920;
-	public int  ResolutionHeight { get; set; } = 1080;
+	public int  DisplayResolutionWidth { get; set; } = 1920;
+	public int  DisplayResolutionHeight { get; set; } = 1080;
+	public int  RenderResolutionWidth { get; set; } = 1920;
+	public int  RenderResolutionHeight { get; set; } = 1080;
 	
 	//Audio Volumes
     public float MasterVolume { get; set; } = 0.5f;

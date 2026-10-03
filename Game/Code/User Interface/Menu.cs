@@ -84,4 +84,11 @@ public partial class Menu : Node
 	
 	
 	
+	public static Vector2I GetPrimaryMonitorResolution()
+	{
+		int primaryScreen = DisplayServer.GetPrimaryScreen();
+		return DisplayServer.ScreenGetSize(primaryScreen);
+	}
+	
+	
 }

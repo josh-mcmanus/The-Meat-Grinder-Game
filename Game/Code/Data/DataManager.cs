@@ -6,13 +6,13 @@ using System.Text.Json;
 public partial class DataManager : Node
 {
 	private const string TAG = "DataManager";
-	public  const string GAME_VERSION = "0.1.0 Date: 25/09/26";
+	public  const string GAME_VERSION = "0.1.0 Date: 04/10/26";
 	
 	public static GameData gameData = new();
     public static SettingsData settingsData = new();
     public enum   SaveTypes { game, settings }
-
-
+    
+    
 	public override void _Ready()
 	{
         LaunchSetup();
@@ -20,15 +20,15 @@ public partial class DataManager : Node
 		LoadAllData();
 		ApplyAllSettings();
 	}
-
-	
     
-    // Player data
+    
+    
+    // Game Save data
     public static void SaveGameData() { Save(SaveTypes.game); }
     public static void LoadGameData() { Load(SaveTypes.game); }
     public static void CreateDefaultGameData() { CreateDefaultFile(SaveTypes.game); }
     
-    // Game data
+    // Settings data
     public static void SaveSettingsData() { Save(SaveTypes.settings); }
     public static void LoadSettingsData() { Load(SaveTypes.settings); }
     public static void CreateDefaultSettingsData() { CreateDefaultFile(SaveTypes.settings); }
@@ -209,26 +209,29 @@ public partial class DataManager : Node
     
 	
 	// Settings
+    
+    // Called on startup
+    // Try to call individual functions when possible
 	public static void ApplyAllSettings()
 	{
-		// Game Window
-        Vector2I resolution = new(
-            settingsData.DisplayResolutionWidth,
-            settingsData.DisplayResolutionHeight
-        );
-		
-		switch (settingsData.Window)
+        SetWindowMode();
+		SetVSyncMode();
+	}
+    
+    
+    public static void SetWindowMode()
+    {
+        switch (settingsData.Window)
 		{
 			case SettingsData.WindowMode.Windowed:
+                SetWindowResolution();
 				DisplayServer.WindowSetMode(DisplayServer.WindowMode.Windowed);
 				DisplayServer.WindowSetFlag(DisplayServer.WindowFlags.Borderless, false);
-                DisplayServer.WindowSetSize(resolution);
 				break;
 			
 			case SettingsData.WindowMode.FullScreen:
-            DisplayServer.WindowSetMode(DisplayServer.WindowMode.Fullscreen);
-				// DisplayServer.WindowSetMode(DisplayServer.WindowMode.ExclusiveFullscreen);
-				DisplayServer.WindowSetFlag(DisplayServer.WindowFlags.Borderless, false);
+                DisplayServer.WindowSetMode(DisplayServer.WindowMode.ExclusiveFullscreen);
+                DisplayServer.WindowSetFlag(DisplayServer.WindowFlags.Borderless, false);
 				break;
 			
 			case SettingsData.WindowMode.Borderless:
@@ -236,8 +239,25 @@ public partial class DataManager : Node
 				DisplayServer.WindowSetFlag(DisplayServer.WindowFlags.Borderless, true);
 				break;
 		}
-		
-		switch (settingsData.VSync)
+    }
+    
+    
+    // Resolution only seems to be a factor in windowed mode
+    // In exclusive / fullscreen it just sets resolution to whatever the monitor is
+    public static void SetWindowResolution()
+    {
+        if (settingsData.Window != SettingsData.WindowMode.Windowed)
+        {
+            return;
+        }
+        
+        DisplayServer.WindowSetSize(GetWindowResolution());
+    }
+    
+    
+    public static void SetVSyncMode()
+    {
+        switch (settingsData.VSync)
 		{
 			case SettingsData.VSyncMode.Disabled:
 				DisplayServer.WindowSetVsyncMode(DisplayServer.VSyncMode.Disabled);
@@ -255,10 +275,16 @@ public partial class DataManager : Node
 				DisplayServer.WindowSetVsyncMode(DisplayServer.VSyncMode.Mailbox);
 				break;
 		}
-		
-		
-		
-	}
+    }
+    
+    
+    public static Vector2I GetWindowResolution()
+    {
+        return new(
+            settingsData.DisplayResolutionWidth,
+			settingsData.DisplayResolutionHeight
+        );
+    }
     
     
 }

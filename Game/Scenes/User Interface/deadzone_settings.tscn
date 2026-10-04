@@ -1,9 +1,9 @@
 [gd_scene format=3 uid="uid://bt64icx8vukah"]
 
-[ext_resource type="Script" uid="uid://k2qmqlfyjg82" path="res://Code/User Interface/DeadzoneMenu.cs" id="1_ai0pt"]
+[ext_resource type="Script" uid="uid://k2qmqlfyjg82" path="res://Code/User Interface/DeadzoneSettings.cs" id="1_ai0pt"]
 [ext_resource type="PackedScene" uid="uid://l5n1ldhkkfb6" path="res://Scenes/User Interface/deadzone.tscn" id="2_7tu52"]
 
-[node name="Deadzone menu" type="Control" unique_id=185872785 node_paths=PackedStringArray("deadzoneLeft", "deadzoneRight", "deadzoneTextInputLeft", "deadzoneSliderInputLeft", "deadzoneTextInputRight", "deadzoneSliderInputRight")]
+[node name="Deadzone Settings" type="Control" unique_id=185872785 node_paths=PackedStringArray("deadzoneLeft", "deadzoneRight", "deadzoneTextInputLeft", "deadzoneSliderInputLeft", "deadzoneTextInputRight", "deadzoneSliderInputRight")]
 process_mode = 3
 layout_mode = 3
 anchors_preset = 15
@@ -26,13 +26,13 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=1496927639]
 layout_mode = 2
-
-[node name="Title" type="Label" parent="MarginContainer/VBoxContainer" unique_id=903966998]
-layout_mode = 2
-text = "Deadzone"
 
 [node name="Deadzones" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=1398813134]
 layout_mode = 2

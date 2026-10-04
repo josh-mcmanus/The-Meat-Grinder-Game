@@ -19,7 +19,7 @@ public partial class Deadzone : Control
 		
 		useableRadius = radius - cursorRadius;
 		
-		// duplicate texture and gradient so both deadzones dont share the same resource
+		// Duplicate texture and gradient so both deadzones dont share the same resource
 		GradientTexture2D texture = deadzoneCircle.Texture.Duplicate() as GradientTexture2D;
 		
 		texture.Gradient = texture.Gradient.Duplicate() as Gradient;

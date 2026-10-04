@@ -1,9 +1,8 @@
 [gd_scene format=3 uid="uid://2skd1hftr8x"]
 
-[ext_resource type="Script" uid="uid://nnuag210ahw0" path="res://Code/User Interface/VolumeMenu.cs" id="1_doibh"]
-[ext_resource type="AudioStream" uid="uid://sjykvltbaj7x" path="res://Money Makes Money.mp3" id="2_r7hh6"]
+[ext_resource type="Script" uid="uid://nnuag210ahw0" path="res://Code/User Interface/VolumeSettings.cs" id="1_doibh"]
 
-[node name="Volume menu" type="Control" unique_id=1622174431 node_paths=PackedStringArray("masterLineEdit", "musicLineEdit", "SFXLineEdit", "UILineEdit", "masterSlider", "musicSlider", "SFXSlider", "UISlider", "musicPlayer")]
+[node name="Volume Settings" type="Control" unique_id=1622174431 node_paths=PackedStringArray("masterLineEdit", "musicLineEdit", "SFXLineEdit", "UILineEdit", "masterSlider", "musicSlider", "SFXSlider", "UISlider", "musicPlayer")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -19,7 +18,7 @@ masterSlider = NodePath("MarginContainer/VBoxContainer/Master/Master Slider")
 musicSlider = NodePath("MarginContainer/VBoxContainer/Music/Music Slider")
 SFXSlider = NodePath("MarginContainer/VBoxContainer/SFX/SFX Slider")
 UISlider = NodePath("MarginContainer/VBoxContainer/UI/UI Slider")
-musicPlayer = NodePath("AudioStreamPlayer Music Test")
+musicPlayer = NodePath("")
 
 [node name="MarginContainer" type="MarginContainer" parent="." unique_id=360399837]
 layout_mode = 1
@@ -28,13 +27,13 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=1192898087]
 layout_mode = 2
-
-[node name="Label" type="Label" parent="MarginContainer/VBoxContainer" unique_id=1256481267]
-layout_mode = 2
-text = "Volume"
 
 [node name="Master" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=499625573]
 layout_mode = 2
@@ -140,10 +139,6 @@ text = "Save"
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Cancel"
-
-[node name="AudioStreamPlayer Music Test" type="AudioStreamPlayer" parent="." unique_id=1248863234]
-stream = ExtResource("2_r7hh6")
-bus = &"Music"
 
 [connection signal="pressed" from="MarginContainer/VBoxContainer/Buttons/Save" to="." method="SaveButtonPressed"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/Buttons/Cancel" to="." method="CancelButtonPressed"]

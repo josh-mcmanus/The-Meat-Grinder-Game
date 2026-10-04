@@ -2,9 +2,9 @@ using Godot;
 using System;
 using System.Text.RegularExpressions;
 
-public partial class DeadzoneMenu : Control
+public partial class DeadzoneSettings : Control
 {
-	private const string TAG = "DeadzoneMenu";
+	private const string TAG = "DeadzoneSettings";
 	
 	[Export] Deadzone deadzoneLeft;
 	[Export] Deadzone deadzoneRight;
@@ -72,11 +72,11 @@ public partial class DeadzoneMenu : Control
 	// Update UI elements and deadzone setting
 	private void OnDeadzoneTextSubmit(string text, LineEdit textField, HSlider slider, Side side)
 	{
-		float? inputNum  = Menu.ValidateStringIsFloat(text);
+		float? inputNum  = Utils.ValidateStringIsFloat(text);
 		
         if (inputNum is float value)
 		{
-            float result = Menu.ClampFloat(value, 0.00f, 1.00f);
+            float result = Utils.ClampFloat(value, 0.00f, 1.00f);
             UpdateLineEditAndSlider(result, textField, slider, side);
 		}
 	}
@@ -118,12 +118,12 @@ public partial class DeadzoneMenu : Control
 	
 	private void OnDeadzoneTextChangedLeft(string text)
 	{
-		Menu.SetLineEditText(text, deadzoneTextInputLeft.CaretColumn, deadzoneTextInputLeft);
+		Utils.SetLineEditText(text, deadzoneTextInputLeft.CaretColumn, deadzoneTextInputLeft);
 	}
 	
 	private void OnDeadzoneTextChangedRight(string text)
 	{
-		Menu.SetLineEditText(text, deadzoneTextInputRight.CaretColumn, deadzoneTextInputRight);
+		Utils.SetLineEditText(text, deadzoneTextInputRight.CaretColumn, deadzoneTextInputRight);
 	}
 	
 	

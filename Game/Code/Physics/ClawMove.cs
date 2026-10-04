@@ -22,6 +22,9 @@ public partial class ClawMove : Node2D
 	
 	public override void _Ready()
 	{
+		// Prevent processing when paused
+		ProcessMode = ProcessModeEnum.Pausable;
+		
 		// Set phsyics properties to prevent tunneling on soft bodies
 		Top.ContinuousCd = RigidBody2D.CcdMode.CastShape;
     	Middle.ContinuousCd = RigidBody2D.CcdMode.CastShape;
@@ -178,16 +181,5 @@ public partial class ClawMove : Node2D
 		Bottom.AngularVelocity = rotationBottomInput * rotationSpeedRads * relativeBottomMass;
 	}
 	
-	// private float ApplyDeadzone(float input, float deadzone)
-	// {
-	// 	float magnitude = Mathf.Abs(input);
-
-	// 	if (magnitude <= deadzone)
-	// 	{
-	// 		return 0.0f;
-	// 	}
-		
-	// 	return Mathf.Sign(input) * ((magnitude - deadzone) / (1.0f - deadzone));
-	// }
 	
 }

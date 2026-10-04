@@ -196,7 +196,7 @@ public partial class DataManager : Node
     {
         if (!DoesFileExist(SaveTypes.settings))
         {
-            Vector2I resolution = Menu.GetPrimaryMonitorResolution();
+            Vector2I resolution = Utils.GetPrimaryMonitorResolution();
             
             settingsData.DisplayResolutionWidth  = resolution.X;
             settingsData.DisplayResolutionHeight = resolution.Y;

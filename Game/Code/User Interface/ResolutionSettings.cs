@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-public partial class Resolution : Control
+public partial class ResolutionSettings : Control
 {
 	
 	[Export] OptionButton resolutionOptionButton;
@@ -59,7 +59,7 @@ public partial class Resolution : Control
 	private void SetupResolutionOptionButton()
 	{
 		// Add monitors native resolution to top if not in list
-		Vector2I nativeResolution = Menu.GetPrimaryMonitorResolution();
+		Vector2I nativeResolution = Utils.GetPrimaryMonitorResolution();
 		Vector2I savedResolution = DataManager.GetWindowResolution();
 		
 		if (!commonResolutions.Contains(nativeResolution)) 

@@ -1,9 +1,9 @@
 using Godot;
 using System;
 
-public partial class VolumeMenu : Control
+public partial class VolumeSettings : Control
 {
-	private const string TAG = "VolumeMenu";
+	private const string TAG = "VolumeSettings";
 	
 	
 	[Export] LineEdit masterLineEdit;
@@ -16,7 +16,6 @@ public partial class VolumeMenu : Control
 	[Export] HSlider SFXSlider;
 	[Export] HSlider UISlider;
 	
-	[Export] AudioStreamPlayer musicPlayer;
 	
 	
 	private VolumeControl[] volumeControls;
@@ -25,6 +24,9 @@ public partial class VolumeMenu : Control
 	
 	public override void _Ready()
 	{
+		// Prevent processing when paused
+		ProcessMode = ProcessModeEnum.WhenPaused;
+		
 		volumeControls = 
 		[
 			new(masterLineEdit, masterSlider, VolumeType.Master),
@@ -35,8 +37,6 @@ public partial class VolumeMenu : Control
 		
 		LoadAllVolumeData();
 		
-		musicPlayer.Play();
-		
 		Utils.Log(TAG, "Volume Menu Loaded");
 		
 		
@@ -46,10 +46,10 @@ public partial class VolumeMenu : Control
 		SFXLineEdit.TextSubmitted += text => OnVolumeTextSubmit(volumeControls[2], text);
 		UILineEdit.TextSubmitted += text => OnVolumeTextSubmit(volumeControls[3], text);
 		
-		masterLineEdit.TextChanged += text => Menu.SetLineEditText(text, masterLineEdit.CaretColumn, masterLineEdit);
-		musicLineEdit.TextChanged += text => Menu.SetLineEditText(text, musicLineEdit.CaretColumn, musicLineEdit);
-		SFXLineEdit.TextChanged += text => Menu.SetLineEditText(text, SFXLineEdit.CaretColumn, SFXLineEdit);
-		UILineEdit.TextChanged += text => Menu.SetLineEditText(text, UILineEdit.CaretColumn, UILineEdit);
+		masterLineEdit.TextChanged += text => Utils.SetLineEditText(text, masterLineEdit.CaretColumn, masterLineEdit);
+		musicLineEdit.TextChanged += text => Utils.SetLineEditText(text, musicLineEdit.CaretColumn, musicLineEdit);
+		SFXLineEdit.TextChanged += text => Utils.SetLineEditText(text, SFXLineEdit.CaretColumn, SFXLineEdit);
+		UILineEdit.TextChanged += text => Utils.SetLineEditText(text, UILineEdit.CaretColumn, UILineEdit);
 		
 		masterSlider.ValueChanged += value => UpdateVolume(volumeControls[0], (float)value);
 		musicSlider.ValueChanged += value => UpdateVolume(volumeControls[1], (float)value);
@@ -59,8 +59,9 @@ public partial class VolumeMenu : Control
 	}
 	
 	
-	// Set UI elements, audio player volume, and save to settingsData
-	private void UpdateVolume(VolumeControl control, float value)
+	
+    // Set UI elements, audio player volume, and save to settingsData
+    private void UpdateVolume(VolumeControl control, float value)
 	{
 		control.LineEdit.Text = value.ToString("F2");
 		control.Slider.Value = value;
@@ -111,11 +112,11 @@ public partial class VolumeMenu : Control
 	// Updates volume if the submitted string is valid
 	private void OnVolumeTextSubmit(VolumeControl control, string text)
 	{
-		float? inputNum  = Menu.ValidateStringIsFloat(text);
+		float? inputNum  = Utils.ValidateStringIsFloat(text);
 		
         if (inputNum is float value)
 		{
-            float result = Menu.ClampFloat(value, 0.00f, 1.00f);
+            float result = Utils.ClampFloat(value, 0.00f, 1.00f);
 			UpdateVolume(control, result);
 		}
 	}
@@ -146,7 +147,7 @@ public partial class VolumeMenu : Control
 	}
 	
 	
-	private struct VolumeControl(LineEdit lineEdit, HSlider slider, VolumeMenu.VolumeType type)
+	private struct VolumeControl(LineEdit lineEdit, HSlider slider, VolumeType type)
     {
 		public LineEdit LineEdit = lineEdit;
 		public HSlider Slider = slider;

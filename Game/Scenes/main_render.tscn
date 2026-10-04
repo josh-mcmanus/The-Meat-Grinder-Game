@@ -1,0 +1,38 @@
+[gd_scene format=3 uid="uid://drfg2tcounig7"]
+
+[ext_resource type="Script" uid="uid://dnymxomambhkf" path="res://Code/MainRender.cs" id="1_1crp2"]
+[ext_resource type="PackedScene" uid="uid://67l14gdo45o0" path="res://Scenes/main.tscn" id="1_vc4rk"]
+[ext_resource type="PackedScene" uid="uid://bfal0erjfisbt" path="res://Scenes/User Interface/settings_menu.tscn" id="2_5r70e"]
+[ext_resource type="AudioStream" uid="uid://sjykvltbaj7x" path="res://Money Makes Money.mp3" id="4_1pu4m"]
+
+[node name="Main Render" type="Node2D" unique_id=527522473 node_paths=PackedStringArray("Main", "Settings", "MenuMusicPlayer")]
+script = ExtResource("1_1crp2")
+Main = NodePath("SubViewportContainer/SubViewport/main")
+Settings = NodePath("CanvasLayer")
+MenuMusicPlayer = NodePath("CanvasLayer/AudioStreamPlayer")
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="." unique_id=841853207]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 1280.0
+offset_bottom = 720.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="SubViewport" type="SubViewport" parent="SubViewportContainer" unique_id=2018593187]
+handle_input_locally = false
+canvas_item_default_texture_filter = 0
+size = Vector2i(1280, 720)
+render_target_update_mode = 4
+
+[node name="main" parent="SubViewportContainer/SubViewport" unique_id=2057963844 instance=ExtResource("1_vc4rk")]
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=213299308]
+visible = false
+
+[node name="SettingsMenu" parent="CanvasLayer" unique_id=1044210487 instance=ExtResource("2_5r70e")]
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="CanvasLayer" unique_id=1514734754]
+stream = ExtResource("4_1pu4m")
+bus = &"Music"

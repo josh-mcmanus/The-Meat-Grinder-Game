@@ -27,17 +27,17 @@ public partial class MainRender : Node2D
     {
 		if (@event.IsActionPressed("ToggleMenu"))
 		{
-			// GD.Print("Toggle");
-			// GD.Print(Settings.Visible);
 			Settings.Visible = !Settings.Visible;
 			Main.GetTree().Paused = !Main.GetTree().Paused;
 
 			if (Settings.Visible)
 			{
+				Utils.UncaptureMouse();
 				MenuMusicPlayer.Play();
 			}
 			else
 			{
+				Utils.CaptureMouse();
 				MenuMusicPlayer.Stop();
 			}
 			

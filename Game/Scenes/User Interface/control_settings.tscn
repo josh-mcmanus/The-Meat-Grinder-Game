@@ -1,0 +1,114 @@
+[gd_scene format=3 uid="uid://cqfju3m0tdnc5"]
+
+[ext_resource type="Script" uid="uid://bsyjn4u00mwsd" path="res://Code/User Interface/ControlSettings.cs" id="1_o3h1k"]
+
+[node name="Control Settings" type="Control" unique_id=1445302456 node_paths=PackedStringArray("SensitivityLineEdit", "MaxDistanceLineEdit", "DeadzoneLineEdit", "SensitivitySlider", "MaxDistanceSlider", "DeadzoneSlider")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_o3h1k")
+SensitivityLineEdit = NodePath("MarginContainer/VBoxContainer/Sensitivity/Sensitivity LineEdit")
+MaxDistanceLineEdit = NodePath("MarginContainer/VBoxContainer/Distance/Distance LineEdit")
+DeadzoneLineEdit = NodePath("MarginContainer/VBoxContainer/Deadzone/Deadzone LineEdit")
+SensitivitySlider = NodePath("MarginContainer/VBoxContainer/Sensitivity/Sensitivity HSlider")
+MaxDistanceSlider = NodePath("MarginContainer/VBoxContainer/Distance/Distance HSlider")
+DeadzoneSlider = NodePath("MarginContainer/VBoxContainer/Deadzone/Deadzone HSlider")
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1808526811]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=1409547417]
+layout_mode = 2
+
+[node name="Sensitivity" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=1225520155]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/Sensitivity" unique_id=1420923468]
+custom_minimum_size = Vector2(170, 0)
+layout_mode = 2
+text = "Mouse Sensitivity"
+
+[node name="Sensitivity LineEdit" type="LineEdit" parent="MarginContainer/VBoxContainer/Sensitivity" unique_id=282736863]
+layout_mode = 2
+placeholder_text = "0.50"
+
+[node name="Sensitivity HSlider" type="HSlider" parent="MarginContainer/VBoxContainer/Sensitivity" unique_id=1359700741]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+min_value = 0.01
+max_value = 1.0
+step = 0.01
+value = 0.01
+tick_count = 34
+ticks_on_borders = true
+
+[node name="Distance" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=350895863]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/Distance" unique_id=889898768]
+custom_minimum_size = Vector2(170, 0)
+layout_mode = 2
+text = "Max Mouse Distance"
+
+[node name="Distance LineEdit" type="LineEdit" parent="MarginContainer/VBoxContainer/Distance" unique_id=2041613717]
+layout_mode = 2
+placeholder_text = "150"
+
+[node name="Distance HSlider" type="HSlider" parent="MarginContainer/VBoxContainer/Distance" unique_id=661814231]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+min_value = 50.0
+max_value = 500.0
+value = 50.0
+tick_count = 26
+ticks_on_borders = true
+
+[node name="Deadzone" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=1393867360]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/Deadzone" unique_id=1647551962]
+custom_minimum_size = Vector2(170, 0)
+layout_mode = 2
+text = "Mouse Deadzone"
+
+[node name="Deadzone LineEdit" type="LineEdit" parent="MarginContainer/VBoxContainer/Deadzone" unique_id=2124786519]
+layout_mode = 2
+placeholder_text = "5"
+
+[node name="Deadzone HSlider" type="HSlider" parent="MarginContainer/VBoxContainer/Deadzone" unique_id=1264551906]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+max_value = 50.0
+tick_count = 26
+ticks_on_borders = true
+
+[node name="HBoxContainer4" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=938737216]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer4" unique_id=1469634396]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Save"
+
+[node name="Button2" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer4" unique_id=886069795]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Cancel"
+
+[connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer4/Button" to="." method="SaveButtonPressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer4/Button2" to="." method="LoadSettings"]

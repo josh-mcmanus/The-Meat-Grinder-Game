@@ -9,10 +9,12 @@ public partial class ClawMove : Node2D
 	[Export] public RigidBody2D Middle;
 	[Export] public RigidBody2D Bottom;
 	
+	[Export] private Marker2D MouseTarget;
+	[Export] private Camera2D Camera;
+	
 	
 	private const float MoveSpeed = 6;
 	private const float RotationSpeedDegrees = 45;
-	private const float MouseControl_MaxSpeedAtDistance = 100;
 	
 	private float rotationSpeedRads;
 	private float relativeTopMass;
@@ -24,6 +26,9 @@ public partial class ClawMove : Node2D
 	{
 		// Prevent processing when paused
 		ProcessMode = ProcessModeEnum.Pausable;
+		
+		// Capture mouse
+		Utils.CaptureMouse();
 		
 		// Set phsyics properties to prevent tunneling on soft bodies
 		Top.ContinuousCd = RigidBody2D.CcdMode.CastShape;
@@ -49,12 +54,14 @@ public partial class ClawMove : Node2D
 	
 	
 	// Switch control scheme based on current input method
+	// Set mouse motion
 	public override void _Input(InputEvent @event)
 	{
 		// Controller
 		if (@event is InputEventJoypadButton)
 		{
 			DataManager.settingsData.ControlMode = SettingsData.InputMode.Controller;
+			MouseTarget.GlobalPosition = Top.GlobalPosition;
 			return;
 		}
 		if (@event is InputEventJoypadMotion motion)
@@ -69,12 +76,26 @@ public partial class ClawMove : Node2D
 			if (Math.Abs(motion.AxisValue) > deadzone)
 			{
 				DataManager.settingsData.ControlMode = SettingsData.InputMode.Controller;
+				MouseTarget.GlobalPosition = Top.GlobalPosition;
 			}
 			return;
 		}
 		
 		// KBM
-		if (@event is InputEventKey || @event is InputEventMouseButton || @event is InputEventMouseMotion)
+		if (@event is InputEventMouseMotion mouseMotion)
+		{
+			DataManager.settingsData.ControlMode = SettingsData.InputMode.KeyboardAndMouse;
+			
+			
+			Vector2 targetOffset = MouseTarget.GlobalPosition - Top.GlobalPosition;
+			targetOffset += mouseMotion.ScreenRelative * DataManager.settingsData.MouseSensitivity;
+			targetOffset = targetOffset.LimitLength(DataManager.settingsData.MaxMouseDistance);
+			
+			MouseTarget.GlobalPosition = Top.GlobalPosition + targetOffset;
+			
+			return;
+		}
+		if (@event is InputEventKey || @event is InputEventMouseButton)
 		{
 			DataManager.settingsData.ControlMode = SettingsData.InputMode.KeyboardAndMouse;
 		}
@@ -86,7 +107,7 @@ public partial class ClawMove : Node2D
 		MoveClaw();
 		RotateClaw();
 		
-		// Utils.Log(TAG, DataManager.settingsData.ControlMode);
+		Camera.GlobalPosition = Top.GlobalPosition;
 	}
 	
 	
@@ -124,22 +145,24 @@ public partial class ClawMove : Node2D
 		Bottom.ApplyImpulse(movementVector * MoveSpeed * relativeBottomMass);
 	}
 	
+	// Get the mouse position as a vector, of the mouses position relative to the center of the screen, not the scene
 	private Vector2 GetMouseMovement()
 	{
-		Vector2 mouseOffset = GetGlobalMousePosition() - Top.GlobalPosition;
 		
+		Vector2 mouseOffset = MouseTarget.GlobalPosition - Top.GlobalPosition;
 		float distance = mouseOffset.Length();
 		
-		if(distance == 0)
+		float deadzone = DataManager.settingsData.MouseDeadzone;
+		float maxDistance = DataManager.settingsData.MaxMouseDistance;
+
+		if (distance <= deadzone)
 		{
 			return Vector2.Zero;
 		}
 		
-		float strength = Mathf.Clamp(distance / MouseControl_MaxSpeedAtDistance, 0, 1);
+		float strength = Mathf.Clamp((distance - deadzone) / (maxDistance - deadzone), -1, 1);
 		
-		Vector2 direction = mouseOffset / distance;
-		
-		return direction * strength;
+		return mouseOffset.Normalized() * strength;
 	}
 	
 	// This is specifically for moving the claw around on controller, as it does not have mouse coordinates

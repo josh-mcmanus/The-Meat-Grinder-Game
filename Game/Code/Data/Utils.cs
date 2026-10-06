@@ -24,6 +24,16 @@ public partial class Utils
 	
 	
 	
+	public static int? ValidateStringIsInt(string text)
+	{
+		if (int.TryParse(text, out int value))
+		{
+			return value;
+		}
+		return null;
+	}
+	
+	
 	
 	// Check if the input text string from a line edit is a float
 	public static float? ValidateStringIsFloat(string text)
@@ -41,6 +51,10 @@ public partial class Utils
 		return Mathf.Clamp(input, min, max);
 	}
 	
+	public static int ClampInt(int input, int min, int max)
+	{
+		return Mathf.Clamp(input, min, max);
+	}
 	
 	
 	public static TextValidationResult ValidateFloatText(string text, int oldCaretPosition)
@@ -110,5 +124,16 @@ public partial class Utils
 	}
 	
 	
+	
+	
+	public static void CaptureMouse()
+	{
+		Input.MouseMode = Input.MouseModeEnum.Captured;
+	}
+	
+	public static void UncaptureMouse()
+	{
+		Input.MouseMode = Input.MouseModeEnum.Visible;
+	}
 	
 }

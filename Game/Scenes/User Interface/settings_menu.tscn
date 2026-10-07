@@ -3,6 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://tqp8u726vpu8" path="res://Scenes/User Interface/display_settings.tscn" id="1_4a5xv"]
 [ext_resource type="PackedScene" uid="uid://2skd1hftr8x" path="res://Scenes/User Interface/volume_settings.tscn" id="2_2tt47"]
 [ext_resource type="PackedScene" uid="uid://bt64icx8vukah" path="res://Scenes/User Interface/deadzone_settings.tscn" id="3_1dfrh"]
+[ext_resource type="PackedScene" uid="uid://cqfju3m0tdnc5" path="res://Scenes/User Interface/control_settings.tscn" id="4_2tt47"]
 
 [node name="SettingsMenu" type="Control" unique_id=1044210487]
 layout_mode = 3
@@ -45,3 +46,8 @@ metadata/_tab_index = 1
 visible = false
 layout_mode = 2
 metadata/_tab_index = 2
+
+[node name="Control Settings" parent="MarginContainer/VBoxContainer/TabContainer" unique_id=1445302456 instance=ExtResource("4_2tt47")]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 3

@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://nnuag210ahw0" path="res://Code/User Interface/VolumeSettings.cs" id="1_doibh"]
 
-[node name="Volume Settings" type="Control" unique_id=1622174431 node_paths=PackedStringArray("masterLineEdit", "musicLineEdit", "SFXLineEdit", "UILineEdit", "masterSlider", "musicSlider", "SFXSlider", "UISlider", "musicPlayer")]
+[node name="Volume Settings" type="Control" unique_id=1622174431 node_paths=PackedStringArray("masterLineEdit", "musicLineEdit", "SFXLineEdit", "UILineEdit", "masterSlider", "musicSlider", "SFXSlider", "UISlider")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -18,7 +18,6 @@ masterSlider = NodePath("MarginContainer/VBoxContainer/Master/Master Slider")
 musicSlider = NodePath("MarginContainer/VBoxContainer/Music/Music Slider")
 SFXSlider = NodePath("MarginContainer/VBoxContainer/SFX/SFX Slider")
 UISlider = NodePath("MarginContainer/VBoxContainer/UI/UI Slider")
-musicPlayer = NodePath("")
 
 [node name="MarginContainer" type="MarginContainer" parent="." unique_id=360399837]
 layout_mode = 1

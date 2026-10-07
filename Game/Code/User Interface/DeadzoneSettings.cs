@@ -6,33 +6,43 @@ public partial class DeadzoneSettings : Control
 {
 	private const string TAG = "DeadzoneSettings";
 	
-	[Export] Deadzone deadzoneLeft;
-	[Export] Deadzone deadzoneRight;
+	[Export] Deadzone DeadzoneLeft;
+	[Export] Deadzone DeadzoneRight;
 	
-	[Export] LineEdit deadzoneTextInputLeft;
-	[Export] HSlider  deadzoneSliderInputLeft;
+	[Export] LineEdit DeadzoneLineEditLeft;
+	[Export] LineEdit DeadzoneLineEditRight;
 	
-	[Export] LineEdit deadzoneTextInputRight;
-	[Export] HSlider  deadzoneSliderInputRight;
+	[Export] HSlider  deadzoneSliderLeft;
+	[Export] HSlider  deadzoneSliderRight;
 	
-	
+	private Utils.SettingControl<Utils.DeadzoneSide> [] deadzoneControls;
 	
 	private Vector2 prevLeft = Vector2.Zero;
 	private Vector2 prevRight = Vector2.Zero;
 	
+	private const string Format = "0.00";
+	private const float  LowerBound = 0;
+	private const float  UpperBound = 1;
+	
 	
 	public override void _Ready()
 	{
-		// Load saved deadzones for UI
-		deadzoneLeft.SetDeadzoneUI(DataManager.settingsData.DeadzoneLeft);
-		deadzoneTextInputLeft.Text = DataManager.settingsData.DeadzoneLeft.ToString("F2");
-		deadzoneSliderInputLeft.Value = DataManager.settingsData.DeadzoneLeft;
+		deadzoneControls =
+		[
+			new(DeadzoneLineEditLeft,  deadzoneSliderLeft,  Utils.DeadzoneSide.Left,  Format, LowerBound, UpperBound),
+			new(DeadzoneLineEditRight, deadzoneSliderRight, Utils.DeadzoneSide.Right, Format, LowerBound, UpperBound),
+		];
 		
-		deadzoneRight.SetDeadzoneUI(DataManager.settingsData.DeadzoneRight);
-		deadzoneTextInputRight.Text = DataManager.settingsData.DeadzoneRight.ToString("F2");
-		deadzoneSliderInputRight.Value = DataManager.settingsData.DeadzoneRight;
+		LoadAllSettingsData();
 		
-		Utils.Log(TAG, "Deadzone Menu Loaded");
+		DeadzoneLineEditLeft.TextSubmitted  += text => OnTextSubmit(deadzoneControls[0], text);
+		DeadzoneLineEditRight.TextSubmitted += text => OnTextSubmit(deadzoneControls[1], text);
+		
+		DeadzoneLineEditLeft.TextChanged  += text => Utils.SetLineEditText(text, DeadzoneLineEditLeft.CaretColumn, DeadzoneLineEditLeft, Utils.FormatType.Float);
+		DeadzoneLineEditRight.TextChanged += text => Utils.SetLineEditText(text, DeadzoneLineEditRight.CaretColumn, DeadzoneLineEditRight, Utils.FormatType.Float);
+		
+		deadzoneSliderLeft.ValueChanged  += value => UpdateSetting(deadzoneControls[0], (float)value);
+		deadzoneSliderRight.ValueChanged += value => UpdateSetting(deadzoneControls[1], (float)value);
 	}
 	
 	
@@ -54,11 +64,11 @@ public partial class DeadzoneSettings : Control
 		
 		if (leftStickAxis != prevLeft || leftStickAxis.Length() > DataManager.settingsData.DeadzoneLeft)
 		{
-			deadzoneLeft.SetCursorPosition(leftStickAxis);
+			DeadzoneLeft.SetCursorPosition(leftStickAxis);
 		}
 		if (rightStickAxis != prevRight || rightStickAxis.Length() > DataManager.settingsData.DeadzoneRight)
 		{
-			deadzoneRight.SetCursorPosition(rightStickAxis);
+			DeadzoneRight.SetCursorPosition(rightStickAxis);
 		}
 		
 		
@@ -68,92 +78,77 @@ public partial class DeadzoneSettings : Control
 	
 	
 	
-	// Validate if the text is a valid float
-	// Update UI elements and deadzone setting
-	private void OnDeadzoneTextSubmit(string text, LineEdit textField, HSlider slider, Side side)
+	// Run when line edit field data is submitted (Enter, Controller confirm, etc)
+	// Update deadzone data if the submitted string is valid
+	private void OnTextSubmit(Utils.SettingControl<Utils.DeadzoneSide> control, string text)
 	{
-		float? inputNum  = Utils.ValidateStringIsFloat(text);
-		
-        if (inputNum is float value)
+		Utils.OnTextSubmit(control, text, UpdateSetting);
+	}
+	
+	
+	// Set UI elements, and save to settings data
+	private void UpdateSetting(Utils.SettingControl<Utils.DeadzoneSide> control, float value)
+	{
+		float result = Utils.UpdateValues(control, value);
+		SaveSetting(control.Type, result);
+	}
+	
+	
+	// Save Deadzone settings for a specified side
+	// Sets the size of the deadzone circle on the UI, of the specified side
+	private void SaveSetting(Utils.DeadzoneSide type, double input)
+	{
+		switch (type)
 		{
-            float result = Utils.ClampFloat(value, 0.00f, 1.00f);
-            UpdateLineEditAndSlider(result, textField, slider, side);
+			case Utils.DeadzoneSide.Left:
+				DeadzoneLeft.SetDeadzoneUI((float)input);
+				DataManager.settingsData.DeadzoneLeft = (float)input;
+				break;
+			
+			case Utils.DeadzoneSide.Right:
+				DeadzoneRight.SetDeadzoneUI((float)input);
+				DataManager.settingsData.DeadzoneRight = (float)input;
+				break;
 		}
 	}
 	
 	
 	
-	// Updates the line edit field and slider to be the input float
-	// Sets the deadzone (Datamanager.settingsData not save file) of the corresponding side to the input
-	private void UpdateLineEditAndSlider(float input, LineEdit textField, HSlider slider, Side side)
-	{
-		textField.Text = input.ToString("F2");
-		slider.Value = input;
-		
-		if (side == Side.Left)
-		{
-			deadzoneLeft.SetDeadzoneUI(input);
-			DataManager.settingsData.DeadzoneLeft = input;
-		}
-		else
-		{
-			deadzoneRight.SetDeadzoneUI(input);
-			DataManager.settingsData.DeadzoneRight = input;
-		}
-	}
+	// Saving and Loading
 	
-	
-	
-	
-	private void OnDeadzoneTextSubmitLeft(string text)
-	{
-		OnDeadzoneTextSubmit(text, deadzoneTextInputLeft, deadzoneSliderInputLeft, Side.Left);
-	}
-	
-	private void OnDeadzoneTextSubmitRight(string text)
-	{
-		OnDeadzoneTextSubmit(text, deadzoneTextInputRight, deadzoneSliderInputRight, Side.Right);
-	}
-	
-	
-	private void OnDeadzoneTextChangedLeft(string text)
-	{
-		Utils.SetLineEditText(text, deadzoneTextInputLeft.CaretColumn, deadzoneTextInputLeft);
-	}
-	
-	private void OnDeadzoneTextChangedRight(string text)
-	{
-		Utils.SetLineEditText(text, deadzoneTextInputRight.CaretColumn, deadzoneTextInputRight);
-	}
-	
-	
-	private void OnSliderValueChangedLeft(float value)
-	{
-		UpdateLineEditAndSlider(value, deadzoneTextInputLeft, deadzoneSliderInputLeft, Side.Left);
-	}
-	
-	private void OnSliderValueChangedRight(float value)
-	{
-		UpdateLineEditAndSlider(value, deadzoneTextInputRight, deadzoneSliderInputRight, Side.Right);
-		
-	}
-	
-	
-	
-	// Save all changes to settings file
+	// Save ALL changes to settings file
 	private void SaveButtonPressed()
 	{
-		DataManager.SaveGameData();
+		DataManager.SaveSettingsData();
 	}
 	
-	// Cancel all settings and load settings file
+	// Dont save any changes, load saved settings data
 	private void CancelButtonPressed()
 	{
 		DataManager.LoadSettingsData();
-		
-		UpdateLineEditAndSlider(DataManager.settingsData.DeadzoneLeft,  deadzoneTextInputLeft,  deadzoneSliderInputLeft,  Side.Left);
-		UpdateLineEditAndSlider(DataManager.settingsData.DeadzoneRight, deadzoneTextInputRight, deadzoneSliderInputRight, Side.Right);
+		LoadAllSettingsData();
 	}
+	
+	// Load and set all volume data from settings
+	private void LoadAllSettingsData()
+	{
+		DeadzoneLeft.SetDeadzoneUI(DataManager.settingsData.DeadzoneLeft);
+		DeadzoneRight.SetDeadzoneUI(DataManager.settingsData.DeadzoneRight);
+		
+		UpdateSetting(deadzoneControls[0], DataManager.settingsData.DeadzoneLeft);
+		UpdateSetting(deadzoneControls[1], DataManager.settingsData.DeadzoneRight);
+		
+		
+		// DeadzoneLeft.SetDeadzoneUI(DataManager.settingsData.DeadzoneLeft);
+		// DeadzoneRight.SetDeadzoneUI(DataManager.settingsData.DeadzoneRight);
+		
+		// deadzoneSliderLeft.Value  = DataManager.settingsData.DeadzoneLeft;
+		// deadzoneSliderRight.Value  = DataManager.settingsData.DeadzoneRight;
+		
+		// DeadzoneLineEditLeft.Text = DataManager.settingsData.DeadzoneLeft.ToString(deadzoneControls[0].Format);
+		// DeadzoneLineEditRight.Text = DataManager.settingsData.DeadzoneRight.ToString(deadzoneControls[1].Format);
+	}
+	
 	
 	
 	
@@ -162,15 +157,8 @@ public partial class DeadzoneSettings : Control
 	{
 		float deadzoneTest = Mathf.Lerp(0.05f, 0.95f, Mathf.PingPong(Time.GetTicksMsec() / 5000.0f, 1.0f));
 		
-		deadzoneLeft.SetDeadzoneUI(deadzoneTest);
-		deadzoneRight.SetDeadzoneUI(deadzoneTest);
-	}
-	
-	
-	private enum Side
-	{
-		Left,
-		Right
+		DeadzoneLeft.SetDeadzoneUI(deadzoneTest);
+		DeadzoneRight.SetDeadzoneUI(deadzoneTest);
 	}
 	
 	

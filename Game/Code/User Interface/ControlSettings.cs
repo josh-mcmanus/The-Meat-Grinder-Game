@@ -11,125 +11,111 @@ public partial class ControlSettings : Control
 	[Export] HSlider  MaxDistanceSlider;
 	[Export] HSlider  DeadzoneSlider;
 	
+	private Utils.SettingControl<Utils.MouseType> [] mouseControls;
+	
+	
+	private const string SensitivityFormat = "0.00";
+	private const float  SensitivityLowerBound = 0.01f;
+	private const float  SensitivityUpperBound = 1;
+	
+	private const string DistanceFormat = "0";
+	private const float  DistanceLowerBound = 100;
+	private const float  DistanceUpperBound = 500;
+	
+	private const string DeadzoneFormat = "0";
+	private const float  DeadzoneLowerBound = 0;
+	private const float  DeadzoneUpperBound = 50;
+	
 	
 	public override void _Ready()
 	{
-		LoadSettings();
+		mouseControls =
+		[
+			new(SensitivityLineEdit, SensitivitySlider, Utils.MouseType.Sensitivity, SensitivityFormat, SensitivityLowerBound, SensitivityUpperBound),
+			new(MaxDistanceLineEdit, MaxDistanceSlider, Utils.MouseType.Distance,    DistanceFormat,    DistanceLowerBound,    DistanceUpperBound),
+			new(DeadzoneLineEdit,    DeadzoneSlider,    Utils.MouseType.Deadzone,    DeadzoneFormat,    DeadzoneLowerBound,    DeadzoneUpperBound),
+		];
+		
+		
+		LoadAllSettingsData();
 		
 		// Text submitted
-		SensitivityLineEdit.TextSubmitted += text => OnTextSubmit(text, SensitivityLineEdit, SensitivitySlider, value => Utils.ValidateStringIsFloat(value), SliderType.Sensitivity);
-		MaxDistanceLineEdit.TextSubmitted += text => OnTextSubmit(text, MaxDistanceLineEdit, MaxDistanceSlider, value => Utils.ValidateStringIsInt(value), SliderType.Distance);
-		DeadzoneLineEdit.TextSubmitted += text => OnTextSubmit(text, DeadzoneLineEdit, DeadzoneSlider, value => Utils.ValidateStringIsInt(value), SliderType.Deadzone);
+		SensitivityLineEdit.TextSubmitted += text => OnTextSubmit(mouseControls[0], text);
+		MaxDistanceLineEdit.TextSubmitted += text => OnTextSubmit(mouseControls[1], text);
+		DeadzoneLineEdit.TextSubmitted    += text => OnTextSubmit(mouseControls[2], text);
 		
 		// Text changed
-		SensitivityLineEdit.TextChanged += text => Utils.SetLineEditText(text, SensitivityLineEdit.CaretColumn, SensitivityLineEdit);
-		MaxDistanceLineEdit.TextChanged += text => Utils.SetLineEditText(text, MaxDistanceLineEdit.CaretColumn, MaxDistanceLineEdit);
-		DeadzoneLineEdit.TextChanged += text => Utils.SetLineEditText(text, DeadzoneLineEdit.CaretColumn, DeadzoneLineEdit);
+		SensitivityLineEdit.TextChanged += text => Utils.SetLineEditText(text, SensitivityLineEdit.CaretColumn, SensitivityLineEdit, Utils.FormatType.Float);
+		MaxDistanceLineEdit.TextChanged += text => Utils.SetLineEditText(text, MaxDistanceLineEdit.CaretColumn, MaxDistanceLineEdit, Utils.FormatType.Int);
+		DeadzoneLineEdit.TextChanged    += text => Utils.SetLineEditText(text, DeadzoneLineEdit.CaretColumn,    DeadzoneLineEdit, Utils.FormatType.Int);
 		
 		// Slider moved
-		SensitivitySlider.ValueChanged += value =>
-		{
-			UpdateLineEditAndSliderDecimal(value, SensitivityLineEdit, SensitivitySlider);
-			Save(value, SliderType.Sensitivity);
-		};
-		MaxDistanceSlider.ValueChanged += value =>
-		{
-			UpdateLineEditAndSlider(value, MaxDistanceLineEdit, MaxDistanceSlider);
-			Save(value, SliderType.Distance);
-		};
-		DeadzoneSlider.ValueChanged += value =>
-		{
-			UpdateLineEditAndSlider(value, DeadzoneLineEdit, DeadzoneSlider);
-			Save(value, SliderType.Deadzone);
-		};
+		SensitivitySlider.ValueChanged += value => UpdateSetting(mouseControls[0], (float)value);
+		MaxDistanceSlider.ValueChanged += value => UpdateSetting(mouseControls[1], (float)value);
+		DeadzoneSlider.ValueChanged    += value => UpdateSetting(mouseControls[2], (float)value);
 	}
 	
 	
-	private void OnTextSubmit<T>(string text, LineEdit textField, HSlider slider, Func<string, T> validateString, SliderType type) where T : notnull
+	// Run when line edit field data is submitted (Enter, Controller confirm, etc)
+	// Updates mouse data if the submitted string is valid
+	private void OnTextSubmit(Utils.SettingControl<Utils.MouseType> control, string text)
 	{
-		T inputNum  = validateString(text);
+		Utils.OnTextSubmit(control, text, UpdateSetting);
+	}
+	
+	
+	// Set UI elements, and save to settings data
+	private void UpdateSetting(Utils.SettingControl<Utils.MouseType> control, float value)
+	{
+		float result = Utils.UpdateValues(control, value);
+		SaveSetting(control.Type, result);
 		
-		if (inputNum is float floatVal)
+		GD.Print($"{control.Type}: {result}");
+	}
+	
+	
+	// Save Mouse settings for a specified type
+	private void SaveSetting(Utils.MouseType type, float input)
+	{
+		switch (type)
 		{
-            float result = Mathf.Clamp(floatVal, 0.00f, 1.00f);
-            UpdateLineEditAndSliderDecimal(result, textField, slider);
+			case Utils.MouseType.Sensitivity:
+				DataManager.settingsData.MouseSensitivity = input;
+				break;
 			
-			Save(result, type);
-		}
-		
-        else if (inputNum is int intVal)
-		{
-			int result = type switch
-			{
-				SliderType.Distance => Mathf.Clamp(intVal, 50, 500),
-				SliderType.Deadzone => Mathf.Clamp(intVal, 0, 50),
-				_ => intVal
-			};
+			case Utils.MouseType.Distance:
+				DataManager.settingsData.MaxMouseDistance = (int)input;
+				break;
 			
-            UpdateLineEditAndSlider(result, textField, slider);
-			Save(result, type);
-		}
-		
-		
-	}
-	
-	private void UpdateLineEditAndSlider(double input, LineEdit textField, HSlider slider)
-	{
-		textField.Text = input.ToString("0");
-		slider.Value = input;
-	}
-	
-	private void UpdateLineEditAndSliderDecimal(double input, LineEdit textField, HSlider slider)
-	{
-		textField.Text = input.ToString("0.00");
-		slider.Value = input;
-	}
-	
-	private void Save(double input, SliderType type)
-	{
-		if (type == SliderType.Sensitivity)
-		{
-			DataManager.settingsData.MouseSensitivity = (float)input;
-		}
-		else if (type == SliderType.Distance)
-		{
-			DataManager.settingsData.MaxMouseDistance = (int)input;
-		}
-		else if (type == SliderType.Deadzone)
-		{
-			DataManager.settingsData.MouseDeadzone = (int)input;
+			case Utils.MouseType.Deadzone:
+				DataManager.settingsData.MouseDeadzone = (int)input;
+				break;
 		}
 	}
 	
 	
+	
+	// Saving and Loading
 	
 	// Save ALL changes to settings file
 	private void SaveButtonPressed()
 	{
 		DataManager.SaveSettingsData();
-		
-		GD.Print(DataManager.settingsData.MouseSensitivity);
-		GD.Print(DataManager.settingsData.MaxMouseDistance);
-		GD.Print(DataManager.settingsData.MouseDeadzone);
 	}
 	
 	// Dont save any changes, load saved settings data
-	// Cancel button press
-	private void LoadSettings()
+	private void CancelButtonPressed()
 	{
 		DataManager.LoadSettingsData();
-		
-		UpdateLineEditAndSliderDecimal(DataManager.settingsData.MouseSensitivity, SensitivityLineEdit, SensitivitySlider);
-		UpdateLineEditAndSlider(DataManager.settingsData.MaxMouseDistance, MaxDistanceLineEdit, MaxDistanceSlider);
-		UpdateLineEditAndSlider(DataManager.settingsData.MouseDeadzone, DeadzoneLineEdit, DeadzoneSlider);
+		LoadAllSettingsData();
 	}
 	
-	
-	enum SliderType
+	// Load and set all mouse data from settings
+	private void LoadAllSettingsData()
 	{
-		Sensitivity,
-		Distance,
-		Deadzone
+		UpdateSetting(mouseControls[0], DataManager.settingsData.MouseSensitivity);
+		UpdateSetting(mouseControls[1], DataManager.settingsData.MaxMouseDistance);
+		UpdateSetting(mouseControls[2], DataManager.settingsData.MouseDeadzone);
 	}
 	
 	

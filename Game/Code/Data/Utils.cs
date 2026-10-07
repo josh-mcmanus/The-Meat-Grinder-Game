@@ -1,4 +1,5 @@
 using Godot;
+using System;
 using System.Text;
 
 #pragma warning disable CS0162 // Unreachable code detected
@@ -24,18 +25,11 @@ public partial class Utils
 	
 	
 	
-	public static int? ValidateStringIsInt(string text)
-	{
-		if (int.TryParse(text, out int value))
-		{
-			return value;
-		}
-		return null;
-	}
+	// ===================== //
+	// Text input validation //
+	// ===================== //
 	
-	
-	
-	// Check if the input text string from a line edit is a float
+	// Check if the input string is a float
 	public static float? ValidateStringIsFloat(string text)
 	{
 		if (float.TryParse(text, out float value))
@@ -45,19 +39,9 @@ public partial class Utils
 		return null;
 	}
 	
-	
-	public static float ClampFloat(float input, float min, float max)
-	{
-		return Mathf.Clamp(input, min, max);
-	}
-	
-	public static int ClampInt(int input, int min, int max)
-	{
-		return Mathf.Clamp(input, min, max);
-	}
-	
-	
-	public static TextValidationResult ValidateFloatText(string text, int oldCaretPosition)
+	// Check if the input string is in the correct format
+	// Float: "x.xx", Int: "xxxx"
+	public static TextValidationResult ValidateStringIsFormattedNum(string text, int oldCaretPosition, FormatType type)
 	{
 		StringBuilder filteredText = new();
 		bool hasDecimal = false;
@@ -73,7 +57,7 @@ public partial class Utils
 			{
 				valid = true;
 			}
-			else if (c == '.' && !hasDecimal && i == 1)
+			else if (type == FormatType.Float && c == '.' && !hasDecimal && i == 1)
 			{
 				valid = true;
 				hasDecimal = true;
@@ -93,29 +77,91 @@ public partial class Utils
 		return new TextValidationResult(filteredText.ToString(), newCaretPosition);
 	}
 	
-	
-	public static void SetLineEditText(string text, int oldCaretPos, LineEdit textField)
+	// Update the input line edit to the correct format for the input string and text caret position
+	public static void SetLineEditText(string text, int oldCaretPos, LineEdit textField, FormatType type)
 	{
-        TextValidationResult result = ValidateFloatText(text, oldCaretPos);
+        TextValidationResult result = ValidateStringIsFormattedNum(text, oldCaretPos, type);
 		
 		textField.Text = result.Text;
 		textField.CaretColumn = result.CaretPosition;
 	}
 	
 	
-	public struct TextValidationResult
+	// Run when line edit field data is submitted (Enter, Controller confirm, etc)
+	// Updates mouse data if the submitted string is valid
+	public static void OnTextSubmit<T>(T control, string text, Action<T, float> UpdateSettings)
 	{
-		public string Text;
-		public int CaretPosition;
-		
-		public TextValidationResult(string text, int caretPosition)
+		float? inputNum  = ValidateStringIsFloat(text);
+
+		if (inputNum is float value)
 		{
-			Text = text;
-			CaretPosition = caretPosition;
+			UpdateSettings(control, value);
 		}
 	}
 	
 	
+	public static float UpdateValues<T>(SettingControl<T> control, float value)
+	{
+		float result = Mathf.Clamp(value, control.LowerBound, control.UpperBound);
+		
+		control.LineEdit.Text = result.ToString(control.Format);
+		control.Slider.Value = result;
+		
+		return result;
+	}
+	
+	
+	
+	public struct TextValidationResult(string text, int caretPosition)
+    {
+		public string Text = text;
+		public int CaretPosition = caretPosition;
+    }
+	
+    public struct SettingControl<T>(LineEdit lineEdit, HSlider slider, T type, string format, float lowerBound, float upperBound)
+    {
+		public LineEdit LineEdit = lineEdit;
+		public HSlider Slider = slider;
+		public T Type = type;
+		public string Format = format;
+		public float LowerBound = lowerBound;
+		public float UpperBound = upperBound;
+    }
+	
+	
+	
+	public enum FormatType
+	{
+		Float,
+		Int
+	}
+	
+	public enum VolumeType
+	{
+		Master,
+		Music,
+		SFX,
+		UI
+	}
+	
+	public enum MouseType
+	{
+		Sensitivity,
+		Distance,
+		Deadzone
+	}
+	
+	public enum DeadzoneSide
+	{
+		Left,
+		Right
+	}
+	
+	
+	
+	// ========== //
+	// Resolution //
+	// ========== //
 	
 	public static Vector2I GetPrimaryMonitorResolution()
 	{
@@ -125,6 +171,9 @@ public partial class Utils
 	
 	
 	
+	// ===== //
+	// Mouse //
+	// ===== //
 	
 	public static void CaptureMouse()
 	{

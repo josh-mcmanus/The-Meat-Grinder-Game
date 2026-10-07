@@ -10,7 +10,7 @@ public class SettingsData
 	
 	// Keyboard and Mouse
 	public float MouseSensitivity  { get; set; } = 0.3f; // 0.01 - 1.00
-	public int   MaxMouseDistance  { get; set; } = 100;  // 50 - 500
+	public int   MaxMouseDistance  { get; set; } = 150;  // 50 - 500
 	public int   MouseDeadzone     { get; set; } = 5;	 // 0  - 50
 	
 	

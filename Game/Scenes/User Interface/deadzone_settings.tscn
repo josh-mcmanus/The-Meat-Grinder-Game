@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://k2qmqlfyjg82" path="res://Code/User Interface/DeadzoneSettings.cs" id="1_ai0pt"]
 [ext_resource type="PackedScene" uid="uid://l5n1ldhkkfb6" path="res://Scenes/User Interface/deadzone.tscn" id="2_7tu52"]
 
-[node name="Deadzone Settings" type="Control" unique_id=185872785 node_paths=PackedStringArray("deadzoneLeft", "deadzoneRight", "deadzoneTextInputLeft", "deadzoneSliderInputLeft", "deadzoneTextInputRight", "deadzoneSliderInputRight")]
+[node name="Deadzone Settings" type="Control" unique_id=185872785 node_paths=PackedStringArray("DeadzoneLeft", "DeadzoneRight", "DeadzoneLineEditLeft", "DeadzoneLineEditRight", "deadzoneSliderLeft", "deadzoneSliderRight")]
 process_mode = 3
 layout_mode = 3
 anchors_preset = 15
@@ -12,12 +12,12 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_ai0pt")
-deadzoneLeft = NodePath("MarginContainer/VBoxContainer/Deadzones/Deadzone L")
-deadzoneRight = NodePath("MarginContainer/VBoxContainer/Deadzones/Deadzone R")
-deadzoneTextInputLeft = NodePath("MarginContainer/VBoxContainer/Inputs/Left Input/Left Text Input")
-deadzoneSliderInputLeft = NodePath("MarginContainer/VBoxContainer/Inputs/Left Input/Left Slider")
-deadzoneTextInputRight = NodePath("MarginContainer/VBoxContainer/Inputs/Right Input/Right Text Input")
-deadzoneSliderInputRight = NodePath("MarginContainer/VBoxContainer/Inputs/Right Input/Right Slider")
+DeadzoneLeft = NodePath("MarginContainer/VBoxContainer/Deadzones/Deadzone L")
+DeadzoneRight = NodePath("MarginContainer/VBoxContainer/Deadzones/Deadzone R")
+DeadzoneLineEditLeft = NodePath("MarginContainer/VBoxContainer/Inputs/Left Input/Left Text Input")
+DeadzoneLineEditRight = NodePath("MarginContainer/VBoxContainer/Inputs/Right Input/Right Text Input")
+deadzoneSliderLeft = NodePath("MarginContainer/VBoxContainer/Inputs/Left Input/Left Slider")
+deadzoneSliderRight = NodePath("MarginContainer/VBoxContainer/Inputs/Right Input/Right Slider")
 
 [node name="MarginContainer" type="MarginContainer" parent="." unique_id=1850667756]
 layout_mode = 1

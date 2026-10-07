@@ -16,9 +16,12 @@ public partial class VolumeSettings : Control
 	[Export] HSlider SFXSlider;
 	[Export] HSlider UISlider;
 	
+	private Utils.SettingControl<Utils.VolumeType>[] volumeControls;
 	
 	
-	private VolumeControl[] volumeControls;
+	private const string Format = "0.00";
+	private const float  LowerBound = 0;
+	private const float  UpperBound = 1;
 	
 	
 	
@@ -29,99 +32,94 @@ public partial class VolumeSettings : Control
 		
 		volumeControls = 
 		[
-			new(masterLineEdit, masterSlider, VolumeType.Master),
-			new(musicLineEdit, musicSlider, VolumeType.Music),
-			new(SFXLineEdit, SFXSlider, VolumeType.SFX),
-			new(UILineEdit, UISlider, VolumeType.UI),
+			new(masterLineEdit, masterSlider, Utils.VolumeType.Master, Format, LowerBound, UpperBound),
+			new(musicLineEdit, musicSlider, Utils.VolumeType.Music, Format, LowerBound, UpperBound),
+			new(SFXLineEdit, SFXSlider, Utils.VolumeType.SFX, Format, LowerBound, UpperBound),
+			new(UILineEdit, UISlider, Utils.VolumeType.UI, Format, LowerBound, UpperBound),
 		];
 		
-		LoadAllVolumeData();
+		LoadAllSettingsData();
 		
 		Utils.Log(TAG, "Volume Menu Loaded");
 		
 		
 		// Connect UI to functions
-		masterLineEdit.TextSubmitted += text => OnVolumeTextSubmit(volumeControls[0], text);
-		musicLineEdit.TextSubmitted += text => OnVolumeTextSubmit(volumeControls[1], text);
-		SFXLineEdit.TextSubmitted += text => OnVolumeTextSubmit(volumeControls[2], text);
-		UILineEdit.TextSubmitted += text => OnVolumeTextSubmit(volumeControls[3], text);
+		masterLineEdit.TextSubmitted += text => OnTextSubmit(volumeControls[0], text);
+		musicLineEdit.TextSubmitted += text => OnTextSubmit(volumeControls[1], text);
+		SFXLineEdit.TextSubmitted += text => OnTextSubmit(volumeControls[2], text);
+		UILineEdit.TextSubmitted += text => OnTextSubmit(volumeControls[3], text);
 		
-		masterLineEdit.TextChanged += text => Utils.SetLineEditText(text, masterLineEdit.CaretColumn, masterLineEdit);
-		musicLineEdit.TextChanged += text => Utils.SetLineEditText(text, musicLineEdit.CaretColumn, musicLineEdit);
-		SFXLineEdit.TextChanged += text => Utils.SetLineEditText(text, SFXLineEdit.CaretColumn, SFXLineEdit);
-		UILineEdit.TextChanged += text => Utils.SetLineEditText(text, UILineEdit.CaretColumn, UILineEdit);
+		masterLineEdit.TextChanged += text => Utils.SetLineEditText(text, masterLineEdit.CaretColumn, masterLineEdit, Utils.FormatType.Float);
+		musicLineEdit.TextChanged += text => Utils.SetLineEditText(text, musicLineEdit.CaretColumn, musicLineEdit, Utils.FormatType.Float);
+		SFXLineEdit.TextChanged += text => Utils.SetLineEditText(text, SFXLineEdit.CaretColumn, SFXLineEdit, Utils.FormatType.Float);
+		UILineEdit.TextChanged += text => Utils.SetLineEditText(text, UILineEdit.CaretColumn, UILineEdit, Utils.FormatType.Float);
 		
-		masterSlider.ValueChanged += value => UpdateVolume(volumeControls[0], (float)value);
-		musicSlider.ValueChanged += value => UpdateVolume(volumeControls[1], (float)value);
-		SFXSlider.ValueChanged += value => UpdateVolume(volumeControls[2], (float)value);
-		UISlider.ValueChanged += value => UpdateVolume(volumeControls[3], (float)value);
+		masterSlider.ValueChanged += value => UpdateSetting(volumeControls[0], (float)value);
+		musicSlider.ValueChanged += value => UpdateSetting(volumeControls[1], (float)value);
+		SFXSlider.ValueChanged += value => UpdateSetting(volumeControls[2], (float)value);
+		UISlider.ValueChanged += value => UpdateSetting(volumeControls[3], (float)value);
 		
 	}
 	
+	
+	
+	// Run when line edit field data is submitted (Enter, Controller confirm, etc)
+	// Updates volume if the submitted string is valid
+	private void OnTextSubmit(Utils.SettingControl<Utils.VolumeType> control, string text)
+	{
+		Utils.OnTextSubmit(control, text, UpdateSetting);
+	}
 	
 	
     // Set UI elements, audio player volume, and save to settingsData
-    private void UpdateVolume(VolumeControl control, float value)
+    private void UpdateSetting(Utils.SettingControl<Utils.VolumeType>  control, float value)
 	{
-		control.LineEdit.Text = value.ToString("F2");
-		control.Slider.Value = value;
-		
-		AudioServer.SetBusVolumeDb((int)control.Type, Mathf.LinearToDb(value));
-		
-		SetVolume(control.Type, value);
+		float result = Utils.UpdateValues(control, value);
+		AudioServer.SetBusVolumeDb((int)control.Type, Mathf.LinearToDb(result));
+		SaveSetting(control.Type, result);
 	}
 	
-	// Return volume for a specified type
-	private float GetVolume(VolumeType type)
-	{
-		return type switch
-		{
-			VolumeType.Master => DataManager.settingsData.MasterVolume,
-			VolumeType.Music => DataManager.settingsData.MusicVolume,
-			VolumeType.SFX => DataManager.settingsData.SFXVolume,
-			VolumeType.UI => DataManager.settingsData.UIVolume,
-			_ => 1.0f
-		};
-	}
 	
 	// Save volume to settingsData for a specified type
-	private void SetVolume(VolumeType type, float value)
+	private void SaveSetting(Utils.VolumeType type, float value)
 	{
 		switch (type)
 		{
-			case VolumeType.Master:
+			case Utils.VolumeType.Master:
 				DataManager.settingsData.MasterVolume = value;
 				break;
 			
-			case VolumeType.Music:
+			case Utils.VolumeType.Music:
 				DataManager.settingsData.MusicVolume = value;
 				break;
 			
-			case VolumeType.SFX:
+			case Utils.VolumeType.SFX:
 				DataManager.settingsData.SFXVolume = value;
 				break;
 			
-			case VolumeType.UI:
+			case Utils.VolumeType.UI:
 				DataManager.settingsData.UIVolume = value;
 				break;
 		}
 	}
 	
 	
-	// Run when line edit field data is submitted (Enter, Controller confirm, etc)
-	// Updates volume if the submitted string is valid
-	private void OnVolumeTextSubmit(VolumeControl control, string text)
+	// Return volume for a specified type
+	private float GetVolume(Utils.VolumeType type)
 	{
-		float? inputNum  = Utils.ValidateStringIsFloat(text);
-		
-        if (inputNum is float value)
+		return type switch
 		{
-            float result = Utils.ClampFloat(value, 0.00f, 1.00f);
-			UpdateVolume(control, result);
-		}
+			Utils.VolumeType.Master => DataManager.settingsData.MasterVolume,
+			Utils.VolumeType.Music => DataManager.settingsData.MusicVolume,
+			Utils.VolumeType.SFX => DataManager.settingsData.SFXVolume,
+			Utils.VolumeType.UI => DataManager.settingsData.UIVolume,
+			_ => 1.0f
+		};
 	}
 	
 	
+	
+	// Saving and Loading
 	
 	// Save ALL changes to settings file
 	private void SaveButtonPressed()
@@ -134,34 +132,16 @@ public partial class VolumeSettings : Control
 	{
 		DataManager.LoadSettingsData();
 
-		LoadAllVolumeData();
+		LoadAllSettingsData();
 	}
 	
 	// Load and set all volume data from settings
-	private void LoadAllVolumeData()
+	private void LoadAllSettingsData()
 	{
-		foreach (VolumeControl control in volumeControls)
+		foreach (Utils.SettingControl<Utils.VolumeType> control in volumeControls)
 		{
-			UpdateVolume(control, GetVolume(control.Type));
+			UpdateSetting(control, GetVolume(control.Type));
 		}
-	}
-	
-	
-	private struct VolumeControl(LineEdit lineEdit, HSlider slider, VolumeType type)
-    {
-		public LineEdit LineEdit = lineEdit;
-		public HSlider Slider = slider;
-		public VolumeType Type = type;
-    }
-
-
-
-    private enum VolumeType
-	{
-		Master,
-		Music,
-		SFX,
-		UI
 	}
 	
 	

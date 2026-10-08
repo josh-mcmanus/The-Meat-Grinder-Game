@@ -69,8 +69,6 @@ public partial class ControlSettings : Control
 	{
 		float result = Utils.UpdateValues(control, value);
 		SaveSetting(control.Type, result);
-		
-		GD.Print($"{control.Type}: {result}");
 	}
 	
 	

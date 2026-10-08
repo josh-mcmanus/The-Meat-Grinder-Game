@@ -22,7 +22,6 @@ buses/default_bus_layout="uid://peppk64l2le6"
 [autoload]
 
 DataManager="*uid://cs40vmg4w2t1f"
-LaunchSetup="*uid://c4www74brpn4w"
 
 [display]
 
@@ -35,6 +34,7 @@ window/stretch/aspect="expand"
 window/quality/screen_space_aa=0
 window/quality/msaa_2d=0
 window/hdr_2d=false
+mouse_cursor/stretch/mode="viewport"
 
 [dotnet]
 

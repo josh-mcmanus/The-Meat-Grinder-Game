@@ -3,6 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://dyfk0k1nfp2oi" path="res://Scenes/Physics/claw.tscn" id="1_8gbba"]
 [ext_resource type="PackedScene" uid="uid://c3tpxpqkbalg0" path="res://Scenes/Physics/meat_long_1.tscn" id="2_jjvhh"]
 [ext_resource type="PackedScene" uid="uid://bli0b8f3x10dt" path="res://Scenes/Physics/meat_cube.tscn" id="3_kry3j"]
+[ext_resource type="PackedScene" uid="uid://bv2khcxg3waf2" path="res://Scenes/Physics/meat_detection_area.tscn" id="4_jjvhh"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_7fu3q"]
 size = Vector2(860, 400)
@@ -83,3 +84,6 @@ shape = SubResource("RectangleShape2D_gxoi5")
 [node name="Polygon2D" type="Polygon2D" parent="Wall Left" unique_id=670912090]
 color = Color(0.2784314, 0.25490198, 0.23529412, 1)
 polygon = PackedVector2Array(30, -270, -30, -270, -30, 403, 30, 403)
+
+[node name="Meat Detection Area" parent="." unique_id=1305989454 instance=ExtResource("4_jjvhh")]
+position = Vector2(436, 589)

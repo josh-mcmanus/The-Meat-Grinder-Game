@@ -247,7 +247,7 @@ metadata/_local_pose_override_enabled_ = true
 [node name="Bone-1" type="Bone2D" parent="SoftBody2D/Skeleton2D" unique_id=665435743]
 position = Vector2(4.886735, 4.637452)
 rotation = 0.3037534
-scale = Vector2(0.99999994, 0.99999994)
+scale = Vector2(0.9999999, 0.9999999)
 rest = Transform2D(0.95422053, 0.2991039, -0.2991039, 0.95422053, 4.886735, 4.637452)
 auto_calculate_length_and_angle = false
 length = 10.0
@@ -313,7 +313,7 @@ metadata/_local_pose_override_enabled_ = true
 [node name="Bone-6" type="Bone2D" parent="SoftBody2D/Skeleton2D" unique_id=163867597]
 position = Vector2(45.300514, 3.7545948)
 rotation = 3.1265998
-scale = Vector2(0.99999994, 0.99999994)
+scale = Vector2(0.9999999, 0.9999999)
 rest = Transform2D(-0.9998876, 0.014992303, -0.014992303, -0.9998876, 45.300514, 3.7545948)
 auto_calculate_length_and_angle = false
 length = 10.0
@@ -418,7 +418,7 @@ metadata/_local_pose_override_enabled_ = true
 [node name="Bone-14" type="Bone2D" parent="SoftBody2D/Skeleton2D" unique_id=406979501]
 position = Vector2(110.59145, 3.1803942)
 rotation = 0.23751973
-scale = Vector2(0.99999994, 0.99999994)
+scale = Vector2(0.9999999, 0.9999999)
 rest = Transform2D(0.97192454, 0.23529272, -0.23529272, 0.97192454, 110.59145, 3.1803942)
 auto_calculate_length_and_angle = false
 length = 10.0
@@ -432,7 +432,7 @@ metadata/_local_pose_override_enabled_ = true
 [node name="Bone-15" type="Bone2D" parent="SoftBody2D/Skeleton2D" unique_id=495093223]
 position = Vector2(101.92411, 4.6271486)
 rotation = -0.16539532
-scale = Vector2(0.99999994, 0.99999994)
+scale = Vector2(0.9999999, 0.9999999)
 rest = Transform2D(0.98635334, -0.16464227, 0.16464227, 0.98635334, 101.92411, 4.6271486)
 auto_calculate_length_and_angle = false
 length = 10.0
@@ -458,8 +458,8 @@ metadata/_local_pose_override_enabled_ = true
 
 [node name="Bone-17" type="Bone2D" parent="SoftBody2D/Skeleton2D" unique_id=1542533287]
 position = Vector2(127.90526, 3.5760796)
-rotation = 0.26847693
-scale = Vector2(0.99999994, 0.99999994)
+rotation = 0.2684769
+scale = Vector2(0.9999999, 0.9999999)
 rest = Transform2D(0.964176, 0.26526323, -0.26526323, 0.964176, 127.90526, 3.5760796)
 auto_calculate_length_and_angle = false
 length = 10.0
@@ -473,7 +473,7 @@ metadata/_local_pose_override_enabled_ = true
 [node name="Bone-18" type="Bone2D" parent="SoftBody2D/Skeleton2D" unique_id=980724854]
 position = Vector2(119.243645, 5.2749987)
 rotation = -0.19368464
-scale = Vector2(0.99999994, 0.99999994)
+scale = Vector2(0.9999999, 0.9999999)
 rest = Transform2D(0.98130167, -0.19247593, 0.19247593, 0.98130167, 119.243645, 5.2749987)
 auto_calculate_length_and_angle = false
 length = 10.0
@@ -525,7 +525,7 @@ metadata/_local_pose_override_enabled_ = true
 
 [node name="Bone-22" type="Bone2D" parent="SoftBody2D/Skeleton2D" unique_id=1986951324]
 position = Vector2(153.88475, 5.848885)
-rotation = 0.05679683
+rotation = 0.056796826
 rest = Transform2D(0.9983875, 0.0567663, -0.0567663, 0.9983875, 153.88475, 5.848885)
 auto_calculate_length_and_angle = false
 length = 10.0

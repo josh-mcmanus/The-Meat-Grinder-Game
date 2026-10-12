@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://67l14gdo45o0"]
 
 [ext_resource type="PackedScene" uid="uid://dyfk0k1nfp2oi" path="res://Scenes/Physics/claw.tscn" id="1_8gbba"]
+[ext_resource type="Script" uid="uid://chpfocxlaugcu" path="res://Code/Main.cs" id="1_kry3j"]
 [ext_resource type="PackedScene" uid="uid://c3tpxpqkbalg0" path="res://Scenes/Physics/meat_long_1.tscn" id="2_jjvhh"]
 [ext_resource type="PackedScene" uid="uid://bli0b8f3x10dt" path="res://Scenes/Physics/meat_cube.tscn" id="3_kry3j"]
 [ext_resource type="PackedScene" uid="uid://bv2khcxg3waf2" path="res://Scenes/Physics/meat_detection_area.tscn" id="4_jjvhh"]
@@ -20,7 +21,10 @@ size = Vector2(60, 187)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_gxoi5"]
 size = Vector2(60, 673)
 
-[node name="main" type="Node2D" unique_id=2057963844]
+[node name="main" type="Node2D" unique_id=2057963844 node_paths=PackedStringArray("MeatDetectionArea", "MeatCube")]
+script = ExtResource("1_kry3j")
+MeatDetectionArea = NodePath("Meat Detection Area")
+MeatCube = NodePath("Meat Cube")
 
 [node name="Claw" parent="." unique_id=1200115391 instance=ExtResource("1_8gbba")]
 position = Vector2(249, 298)

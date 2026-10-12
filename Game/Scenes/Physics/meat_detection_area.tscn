@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://bv2khcxg3waf2"]
+
+[ext_resource type="Script" uid="uid://boivh18flt6w3" path="res://Code/Physics/MeatDetectionArea.cs" id="1_kva3a"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hunv0"]
+size = Vector2(160, 60)
+
+[node name="Meat Detection Area" type="Area2D" unique_id=1305989454]
+script = ExtResource("1_kva3a")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1568023816]
+shape = SubResource("RectangleShape2D_hunv0")
+
+[connection signal="body_shape_entered" from="." to="." method="DetectCollision"]

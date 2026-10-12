@@ -1,5 +1,7 @@
 using Godot;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 #pragma warning disable CS0162 // Unreachable code detected
@@ -183,6 +185,36 @@ public partial class Utils
 	public static void UncaptureMouse()
 	{
 		Input.MouseMode = Input.MouseModeEnum.Visible;
+	}
+	
+	
+	
+	// ========= //
+	// Collision //
+	// ========= //
+	
+	public static List<PhysicsBody2D> GetBonesFromNode(Node2D node)
+	{
+		List<PhysicsBody2D> boneList = [];
+		
+		foreach (var part in node.GetChildren())
+		{
+			string name = part.Name;
+			// GD.Print(name);
+			// GD.Print(name.Contains("Bone"));
+			// GD.Print(part.GetType() == typeof(PhysicsBody2D));
+			// GD.Print(part is PhysicsBody2D);
+			var test = part.GetType();
+			GD.Print(test);
+			
+			if (part is PhysicsBody2D bone && name.Contains("Bone"))
+			{
+				boneList.Add(bone);
+				GD.Print(bone.Name);
+			}
+		}
+		
+		return [.. boneList];
 	}
 	
 }

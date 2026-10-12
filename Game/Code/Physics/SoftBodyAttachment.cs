@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 
 
 /*	
@@ -12,16 +13,19 @@ using System;
 	So there are no references to null nodes.
 	
 */
-public partial class AttachedPart : Node2D
+public partial class SoftBodyAttachment : Node2D
 {
-	[Export]
-	public PinJoint2D[] Joints;
+	[Export] public PinJoint2D[] Joints;
+	[Export] public Skeleton2D Skeleton;
 	
-	private PhysicsBody2D[] JointNodes;
+	
+	private PhysicsBody2D[] jointNodes;
+	public  List<PhysicsBody2D> boneList;
+	
 	
     public override void _Ready()
     {
-		JointNodes = new PhysicsBody2D[Joints.Length];
+		jointNodes = new PhysicsBody2D[Joints.Length];
 		
 		// Generate n number of joint nodes, for comparison later
 		for (int i = 0; i < Joints.Length; i++)
@@ -30,9 +34,13 @@ public partial class AttachedPart : Node2D
 		
 			if(IsInstanceValid(joint) && !joint.NodeA.IsEmpty)
 			{
-				JointNodes[i] =  joint.GetNode(joint.NodeA) as PhysicsBody2D;
+				jointNodes[i] =  joint.GetNode(joint.NodeA) as PhysicsBody2D;
 			}
 		}
+		
+		// save a list of all starting bones, for score calculation later
+		boneList = Utils.GetBonesFromNode(this);
+		GD.Print(boneList.Count);
     }
 	
 	
@@ -41,8 +49,13 @@ public partial class AttachedPart : Node2D
 	{
 		for (int i = 0; i < Joints.Length; i++)
 		{
+			// GD.Print(bodyA.Name);
+			// GD.Print(bodyB.Name);
 			RemoveJoint(i, bodyA, bodyB);
 		}
+		
+		boneList.Remove(bodyB);
+		
 	}
 	
 	
@@ -50,7 +63,7 @@ public partial class AttachedPart : Node2D
 	private void RemoveJoint(int index, PhysicsBody2D bodyA, PhysicsBody2D bodyB)
 	{
 		PinJoint2D joint = Joints[index];
-		PhysicsBody2D jointNode = JointNodes[index];
+		PhysicsBody2D jointNode = jointNodes[index];
 		
 		
 		if (!IsInstanceValid(joint)) return;
@@ -62,6 +75,6 @@ public partial class AttachedPart : Node2D
 		
 		joint.QueueFree();
 		Joints[index] = null;
-		JointNodes[index] = null;
+		jointNodes[index] = null;
 	}
 }

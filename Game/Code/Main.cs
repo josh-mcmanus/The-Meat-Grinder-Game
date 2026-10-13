@@ -27,7 +27,10 @@ public partial class Main : Node2D
 	// Which will be looped through instead of just checing this specific singular meat cube
 	private void Test(Node2D node)
 	{
-		int totalBonesAtInitialization = Utils.GetBonesFromNode(MeatCube.Skeleton).Count;
+		
+		
+		
+		int totalBonesAtInitialization = Utils.GetSoftBodyBones(MeatCube).Count;
 		int currentBoneCount = MeatCube.boneList.Count;
 		
 		

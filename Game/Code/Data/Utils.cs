@@ -193,26 +193,49 @@ public partial class Utils
 	// Collision //
 	// ========= //
 	
-	public static List<PhysicsBody2D> GetBonesFromNode(Node2D node)
+	public static List<PhysicsBody2D> GetSoftBodyBones(Node2D node)
 	{
 		List<PhysicsBody2D> boneList = [];
 		
-		foreach (var part in node.GetChildren())
+		// foreach (Node part in node.GetChildren())
+		// {
+		// 	GD.Print($"Name: {part.Name}");
+		// 	GD.Print($"Type: {part.GetType()}");
+		// 	GD.Print($"Parent: {part.GetParent().Name}");
+		// 	GD.Print("---");
+		// }
+		
+		var childBones = node.FindChildren("*", type:"RigidBody2D");
+
+		foreach (var bone in childBones)
 		{
-			string name = part.Name;
-			// GD.Print(name);
-			// GD.Print(name.Contains("Bone"));
-			// GD.Print(part.GetType() == typeof(PhysicsBody2D));
-			// GD.Print(part is PhysicsBody2D);
-			var test = part.GetType();
-			GD.Print(test);
-			
-			if (part is PhysicsBody2D bone && name.Contains("Bone"))
+			if (bone is PhysicsBody2D body)
 			{
-				boneList.Add(bone);
-				GD.Print(bone.Name);
+				boneList.Add(body);
 			}
+			
+			
+			
+			// GD.Print(bone.Name);
+			// GD.Print(bone.GetType());
 		}
+		
+		// foreach (var part in node.GetChildren())
+		// {
+		// 	string name = part.Name;
+		// 	// GD.Print(name);
+		// 	// GD.Print(name.Contains("Bone"));
+		// 	// GD.Print(part.GetType() == typeof(PhysicsBody2D));
+		// 	// GD.Print(part is PhysicsBody2D);
+		// 	var test = part.GetType();
+		// 	// GD.Print(test);
+			
+		// 	if (part is PhysicsBody2D bone && name.Contains("Bone"))
+		// 	{
+		// 		boneList.Add(bone);
+		// 		// GD.Print(bone.Name);
+		// 	}
+		// }
 		
 		return [.. boneList];
 	}

@@ -16,8 +16,6 @@ using System.Collections.Generic;
 public partial class SoftBodyAttachment : Node2D
 {
 	[Export] public PinJoint2D[] Joints;
-	[Export] public Skeleton2D Skeleton;
-	
 	
 	private PhysicsBody2D[] jointNodes;
 	public  List<PhysicsBody2D> boneList;
@@ -39,7 +37,7 @@ public partial class SoftBodyAttachment : Node2D
 		}
 		
 		// save a list of all starting bones, for score calculation later
-		boneList = Utils.GetBonesFromNode(this);
+		boneList = Utils.GetSoftBodyBones(this);
 		GD.Print(boneList.Count);
     }
 	

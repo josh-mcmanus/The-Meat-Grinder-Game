@@ -16,13 +16,20 @@ using System.Collections.Generic;
 public partial class SoftBodyAttachment : Node2D
 {
 	[Export] public PinJoint2D[] Joints;
+	[Export] private bool IsAttachment;
 	
 	private PhysicsBody2D[] jointNodes;
 	public  List<PhysicsBody2D> boneList;
 	
 	
+	
     public override void _Ready()
     {
+		if (!IsAttachment)
+		{
+			return;
+		}
+		
 		jointNodes = new PhysicsBody2D[Joints.Length];
 		
 		// Generate n number of joint nodes, for comparison later
@@ -38,13 +45,19 @@ public partial class SoftBodyAttachment : Node2D
 		
 		// save a list of all starting bones, for score calculation later
 		boneList = Utils.GetSoftBodyBones(this);
-		GD.Print(boneList.Count);
+		// GD.Print(boneList.Count);
     }
 	
 	
 	// Connected signal, run removal over every joint in list
 	public void OnSoftBody2DJointRemoved(PhysicsBody2D bodyA, PhysicsBody2D bodyB)
 	{
+		if (!IsAttachment)
+		{
+			return;
+		}
+		
+		
 		for (int i = 0; i < Joints.Length; i++)
 		{
 			// GD.Print(bodyA.Name);
@@ -52,6 +65,7 @@ public partial class SoftBodyAttachment : Node2D
 			RemoveJoint(i, bodyA, bodyB);
 		}
 		
+		boneList.Remove(bodyA);
 		boneList.Remove(bodyB);
 		
 	}
@@ -60,6 +74,11 @@ public partial class SoftBodyAttachment : Node2D
 	// Remove joint node, if soft body break is removing the physics body associated with the joint
 	private void RemoveJoint(int index, PhysicsBody2D bodyA, PhysicsBody2D bodyB)
 	{
+		if (!IsAttachment)
+		{
+			return;
+		}
+		
 		PinJoint2D joint = Joints[index];
 		PhysicsBody2D jointNode = jointNodes[index];
 		

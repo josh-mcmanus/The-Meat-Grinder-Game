@@ -2,8 +2,6 @@
 
 [ext_resource type="PackedScene" uid="uid://dyfk0k1nfp2oi" path="res://Scenes/Physics/claw.tscn" id="1_8gbba"]
 [ext_resource type="Script" uid="uid://chpfocxlaugcu" path="res://Code/Main.cs" id="1_kry3j"]
-[ext_resource type="PackedScene" uid="uid://c3tpxpqkbalg0" path="res://Scenes/Physics/meat_long_1.tscn" id="2_jjvhh"]
-[ext_resource type="PackedScene" uid="uid://bli0b8f3x10dt" path="res://Scenes/Physics/meat_cube.tscn" id="3_kry3j"]
 [ext_resource type="PackedScene" uid="uid://bv2khcxg3waf2" path="res://Scenes/Physics/meat_detection_area.tscn" id="4_jjvhh"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_7fu3q"]
@@ -21,19 +19,13 @@ size = Vector2(60, 187)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_gxoi5"]
 size = Vector2(60, 673)
 
-[node name="main" type="Node2D" unique_id=2057963844 node_paths=PackedStringArray("MeatDetectionArea", "MeatCube")]
+[node name="main" type="Node2D" unique_id=2057963844 node_paths=PackedStringArray("MeatDetectionArea", "Claw")]
 script = ExtResource("1_kry3j")
 MeatDetectionArea = NodePath("Meat Detection Area")
-MeatCube = NodePath("Meat Cube")
+Claw = NodePath("Claw")
 
 [node name="Claw" parent="." unique_id=1200115391 instance=ExtResource("1_8gbba")]
 position = Vector2(249, 298)
-
-[node name="Meat Long 1" parent="." unique_id=1976232199 instance=ExtResource("2_jjvhh")]
-position = Vector2(331, 357)
-
-[node name="Meat Cube" parent="." unique_id=356658779 instance=ExtResource("3_kry3j")]
-position = Vector2(274, 425)
 
 [node name="Floor Left" type="StaticBody2D" parent="." unique_id=884540054]
 position = Vector2(430, 873)
@@ -90,4 +82,4 @@ color = Color(0.2784314, 0.25490198, 0.23529412, 1)
 polygon = PackedVector2Array(30, -270, -30, -270, -30, 403, 30, 403)
 
 [node name="Meat Detection Area" parent="." unique_id=1305989454 instance=ExtResource("4_jjvhh")]
-position = Vector2(436, 589)
+position = Vector2(612, 336)

@@ -197,47 +197,43 @@ public partial class Utils
 	{
 		List<PhysicsBody2D> boneList = [];
 		
-		// foreach (Node part in node.GetChildren())
-		// {
-		// 	GD.Print($"Name: {part.Name}");
-		// 	GD.Print($"Type: {part.GetType()}");
-		// 	GD.Print($"Parent: {part.GetParent().Name}");
-		// 	GD.Print("---");
-		// }
-		
 		var childBones = node.FindChildren("*", type:"RigidBody2D");
-
+		
 		foreach (var bone in childBones)
 		{
 			if (bone is PhysicsBody2D body)
 			{
 				boneList.Add(body);
 			}
-			
-			
-			
-			// GD.Print(bone.Name);
-			// GD.Print(bone.GetType());
 		}
-		
-		// foreach (var part in node.GetChildren())
-		// {
-		// 	string name = part.Name;
-		// 	// GD.Print(name);
-		// 	// GD.Print(name.Contains("Bone"));
-		// 	// GD.Print(part.GetType() == typeof(PhysicsBody2D));
-		// 	// GD.Print(part is PhysicsBody2D);
-		// 	var test = part.GetType();
-		// 	// GD.Print(test);
-			
-		// 	if (part is PhysicsBody2D bone && name.Contains("Bone"))
-		// 	{
-		// 		boneList.Add(bone);
-		// 		// GD.Print(bone.Name);
-		// 	}
-		// }
 		
 		return [.. boneList];
 	}
+	
+	
+	
+	public static void SummonSoftBody(Node2D summonAtNode, SoftBodyData.SoftBodyTypes type, Vector2 spawnPosition)
+	{
+		// Create new soft body scene of specified type
+		PackedScene softBody = SoftBodyData.softBodyScenes.GetValueOrDefault(type);
+
+		if (softBody == null)
+		{
+			GD.Print("ERROR NO SOFT BODY FOUND FOR TYPE: " + type);
+			return;
+		}
+		
+		Node2D softBodyScene = (Node2D)softBody.Instantiate();
+		
+		softBodyScene.GlobalPosition = summonAtNode.ToLocal(spawnPosition);
+		// Add scene as child , set properties
+		summonAtNode.AddChild(softBodyScene);
+		
+		
+		
+		// Add to current active soft body list
+		DataManager.softBodyData.activeSoftBodies.Add((SoftBodyAttachment)softBodyScene);
+	}
+	
 	
 }

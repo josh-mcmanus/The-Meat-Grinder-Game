@@ -2,7 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://dvg5ej0fylqqx" path="res://Assets/Old/icon.svg" id="1_4qutg"]
 [ext_resource type="Script" uid="uid://bvv7goixaqhm0" path="res://Code/Old/Chain.cs" id="2_jnnf6"]
-[ext_resource type="PackedScene" uid="uid://bli0b8f3x10dt" path="res://Scenes/Physics/meat_cube.tscn" id="3_wxilx"]
+[ext_resource type="PackedScene" uid="uid://bli0b8f3x10dt" path="res://Scenes/Physics/meat_cube_1.tscn" id="3_wxilx"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_hunv0"]
 

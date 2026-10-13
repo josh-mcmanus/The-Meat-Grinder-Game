@@ -1,6 +1,7 @@
 
 using Godot;
 using System;
+using System.Collections.Generic;
 using System.Text.Json;
 
 public partial class DataManager : Node
@@ -11,6 +12,8 @@ public partial class DataManager : Node
 	public static GameData gameData = new();
     public static SettingsData settingsData = new();
     public enum   SaveTypes { game, settings }
+    
+    public static SoftBodyData softBodyData = new();
     
     
 	public override void _Ready()

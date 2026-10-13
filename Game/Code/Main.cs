@@ -5,57 +5,63 @@ public partial class Main : Node2D
 {
 	[Export] private MeatDetectionArea MeatDetectionArea;
 	
-	// TEMP for testing collision area works
-	[Export] private SoftBodyAttachment MeatCube;
-	
+	[Export] private ClawMove Claw;
 	
 	
 	public override void _Ready()
 	{
-		MeatDetectionArea.CollisionDetected += Test;
-	}
-
-    public override void _PhysicsProcess(double delta)
-    {
+		// Utils.SummonSoftBody(this, SoftBodyData.SoftBodyTypes.MeatCube1, new(250,400));
+		// Utils.SummonSoftBody(this, SoftBodyData.SoftBodyTypes.MeatCube1, new(500,400));
+		// Utils.SummonSoftBody(this, SoftBodyData.SoftBodyTypes.MeatLong1, new(350,350));
 		
+		MeatDetectionArea.CollisionDetected += Test;
+		
+	}
+	
+	
+	// TEST
+    public override void _Input(InputEvent @event)
+    {
+		if (Input.IsActionJustPressed("TEST"))
+		{
+			// var global = GetGlobalMousePosition();
+			// Vector2 pos = new(global.X + 100, global.Y + 100);
+			
+			Claw.StopClawForTest();
+			
+			
+			GD.Print($"Mouse: {GetGlobalMousePosition()}");
+			GD.Print($"Top position: {Claw.Top.GlobalPosition}");
+			GD.Print($"Top velocity: {Claw.Top.LinearVelocity}");
+			GD.Print($"Top angular velocity: {Claw.Top.AngularVelocity}");
+			GD.Print($"Physics frames: {Engine.GetPhysicsFrames()}");
+
+			Utils.SummonSoftBody(
+				this,
+				SoftBodyData.SoftBodyTypes.MeatCube1,
+				new Vector2(500, 100)
+			);
+			
+			// GD.Print(GetGlobalMousePosition());
+			// Utils.SummonSoftBody(this, SoftBodyData.SoftBodyTypes.MeatCube1, new(500, 100));
+		}
     }
 	
 	
 	// Detecting if a soft body enters a collision area
-	// WILL CHANGE TO SOMETHING LATER, JUST TO TEST COLLISION IS WORKING
-	// Will create a way to initialize soft bodies / generate them or something and store to a global list, removing when fully destroyed or put into the goal zone.
-	// Which will be looped through instead of just checing this specific singular meat cube
 	private void Test(Node2D node)
 	{
+		foreach (SoftBodyAttachment body in DataManager.softBodyData.activeSoftBodies)
+		{
+			int totalBonesAtInitialization = Utils.GetSoftBodyBones(body).Count;
+			int currentBoneCount = body.boneList.Count;
+			
+			// GD.Print(body.Name);
+			// GD.Print(totalBonesAtInitialization);
+			// GD.Print(currentBoneCount);
+		}
 		
-		
-		
-		int totalBonesAtInitialization = Utils.GetSoftBodyBones(MeatCube).Count;
-		int currentBoneCount = MeatCube.boneList.Count;
-		
-		
-		
-		GD.Print(totalBonesAtInitialization);
-		GD.Print(currentBoneCount);
-		GD.Print("==========================\n");
-		
-		// int removedBones = totalBonesAtInitialization - currentBoneCount;
-		// GD.Print(removedBones);
-		
-		
-		
-		// GD.Print("Skeleton child count: ", MeatCube.Skeleton.GetChildCount());
-		// GD.Print("Skeleton bone count: ", MeatCube.Skeleton.GetBoneCount());
-
-		// foreach (Node child in MeatCube.Skeleton.GetChildren())
-		// {
-		// 	GD.Print(
-		// 		child.Name,
-		// 		" | Type: ", child.GetType().Name,
-		// 		" | Valid: ", IsInstanceValid(child),
-		// 		" | In tree: ", child.IsInsideTree()
-		// 	);
-		// }
+		// GD.Print("===================\n");
 	}
 	
 	

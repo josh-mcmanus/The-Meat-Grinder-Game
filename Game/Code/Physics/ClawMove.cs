@@ -80,8 +80,13 @@ public partial class ClawMove : Node2D
 			}
 			return;
 		}
-		
+
 		// KBM
+		// if (@event is InputEventMouseMotion)
+		// {
+		// 	return;
+		// }
+		
 		if (@event is InputEventMouseMotion mouseMotion)
 		{
 			DataManager.settingsData.ControlMode = SettingsData.InputMode.KeyboardAndMouse;
@@ -91,7 +96,7 @@ public partial class ClawMove : Node2D
 			targetOffset += mouseMotion.ScreenRelative * DataManager.settingsData.MouseSensitivity;
 			targetOffset = targetOffset.LimitLength(DataManager.settingsData.MaxMouseDistance);
 			
-			MouseTarget.GlobalPosition = Top.GlobalPosition + targetOffset;
+			// MouseTarget.GlobalPosition = Top.GlobalPosition + targetOffset;
 			
 			return;
 		}
@@ -204,5 +209,19 @@ public partial class ClawMove : Node2D
 		Bottom.AngularVelocity = rotationBottomInput * rotationSpeedRads * relativeBottomMass;
 	}
 	
+	
+	
+	public void StopClawForTest()
+	{
+		SetPhysicsProcess(false);
+		SetProcessInput(false);
+		
+		Top.LinearVelocity    = Vector2.Zero;
+		Middle.LinearVelocity = Vector2.Zero;
+		Bottom.LinearVelocity = Vector2.Zero;
+		Top.AngularVelocity    = 0;
+		Middle.AngularVelocity = 0;
+		Bottom.AngularVelocity = 0;
+	}
 	
 }

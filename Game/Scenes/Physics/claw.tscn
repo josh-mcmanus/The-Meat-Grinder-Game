@@ -6,7 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://dwyqf885rbqc3" path="res://Assets/Middle.png" id="4_53mel"]
 [ext_resource type="Texture2D" uid="uid://b5av6ge7bc0dt" path="res://Assets/Bottom No Nail.png" id="5_qh6dt"]
 [ext_resource type="Script" uid="uid://o5ydf7etssce" path="res://Code/Art/ConnectiveTissue.cs" id="6_5a08a"]
-[ext_resource type="Texture2D" uid="uid://dvg5ej0fylqqx" path="res://Assets/Old/icon.svg" id="7_hevwm"]
+[ext_resource type="Texture2D" uid="uid://cnjf5kuj86bka" path="res://Assets/crosshair.png" id="7_hevwm"]
 
 [sub_resource type="Gradient" id="Gradient_wb80u"]
 colors = PackedColorArray(0.5924475, 2.201982e-06, 4.3317675e-07, 1, 0.34615496, 3.3691526e-07, 2.4065375e-07, 1)
@@ -258,5 +258,5 @@ position_smoothing_speed = 2.0
 [node name="MouseTargetMarker" type="Marker2D" parent="." unique_id=1018609512]
 
 [node name="Sprite2D" type="Sprite2D" parent="MouseTargetMarker" unique_id=198721888]
-scale = Vector2(0.1, 0.1)
+scale = Vector2(0.5, 0.5)
 texture = ExtResource("7_hevwm")

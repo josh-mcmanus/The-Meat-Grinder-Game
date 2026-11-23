@@ -4,7 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://67l14gdo45o0" path="res://Scenes/main.tscn" id="1_vc4rk"]
 [ext_resource type="PackedScene" uid="uid://bfal0erjfisbt" path="res://Scenes/User Interface/settings_menu.tscn" id="2_5r70e"]
 [ext_resource type="Script" uid="uid://b4qfh7fnar7wj" path="res://Code/User Interface/SettingsViewport.cs" id="2_t1mkm"]
-[ext_resource type="AudioStream" uid="uid://sjykvltbaj7x" path="res://Money Makes Money.mp3" id="4_1pu4m"]
+[ext_resource type="AudioStream" uid="uid://8jojdsyffhaj" path="res://Project Ex - Neo Nebula (freetouse.com).mp3" id="5_t1mkm"]
 
 [node name="Main Render" type="Node2D" unique_id=527522473 node_paths=PackedStringArray("Main", "Settings", "MenuMusicPlayer")]
 script = ExtResource("1_1crp2")
@@ -38,5 +38,5 @@ visible = false
 [node name="SettingsMenu" parent="CanvasLayer" unique_id=1044210487 instance=ExtResource("2_5r70e")]
 
 [node name="Menu AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=1514734754]
-stream = ExtResource("4_1pu4m")
+stream = ExtResource("5_t1mkm")
 bus = &"Music"

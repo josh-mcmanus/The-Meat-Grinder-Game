@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://8jojdsyffhaj"
+path="res://.godot/imported/Project Ex - Neo Nebula (freetouse.com).mp3-55dd60188579a623b46d17589ba352ba.mp3str"
+
+[deps]
+
+source_file="res://Project Ex - Neo Nebula (freetouse.com).mp3"
+dest_files=["res://.godot/imported/Project Ex - Neo Nebula (freetouse.com).mp3-55dd60188579a623b46d17589ba352ba.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4
